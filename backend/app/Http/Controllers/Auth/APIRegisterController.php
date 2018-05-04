@@ -17,7 +17,7 @@ class APIRegisterController extends Controller
         $credentials = $request->only('username', 'email', 'password');
 
         $rules = [
-            'username' => 'required|max:255|unique:users',
+            'name' => 'required|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|min:6',
         ];
@@ -29,7 +29,7 @@ class APIRegisterController extends Controller
         }
 
         User::create([
-            'username' => $request->get('username'),
+            'name' => $request->get('username'),
             'email' => $request->get('email'),
             'password' => \Illuminate\Support\Facades\Hash::make($request->get('password')),
             'role' => 'user',

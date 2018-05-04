@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use JWTFactory;
 use JWTAuth;
-use App\User;
-use Illuminate\Support\Facades\Auth;
+
 
 class APILoginController extends Controller
 {

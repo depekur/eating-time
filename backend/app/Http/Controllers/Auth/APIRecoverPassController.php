@@ -6,6 +6,7 @@ use App;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 
 class APIRecoverPassController extends Controller
@@ -22,8 +23,12 @@ class APIRecoverPassController extends Controller
             return response()->json(['error' => ['email'=> $error_message]], 401);
         }
 
+
+
         try {
-            App\User::sendPasswordResetNotification();
+//            $token = Password::broker()->createToken($user);
+//
+//            $user->sendPasswordResetNotification($token);
 
             Password::sendResetLink($request->only('email'), function (Message $message) {
                 $message->subject('Your Password Reset Link');

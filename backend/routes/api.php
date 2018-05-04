@@ -18,10 +18,11 @@ use Illuminate\Http\Request;
 //});
 
 
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-
-Route::post('user/register', 'Auth\APIRegisterController@register');
-Route::post('user/login', 'Auth\APILoginController@login');
+Route::post('register', 'Auth\APIRegisterController@register');
+Route::post('login', 'Auth\APILoginController@login');
 Route::post('recover', 'Auth\ApiRecoverPassController@recover');
 
 Route::get('/', 'RecipeController@index');
@@ -34,7 +35,7 @@ Route::group(['middleware' => 'jwt.auth'], function() {
 
 
     Route::get('users', function(Request $request) {
-        return auth()->user();
+        return $request->user();
     });
 
 });
