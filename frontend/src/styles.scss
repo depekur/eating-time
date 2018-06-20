@@ -1,0 +1,16 @@
+@import "./assets/style/reset";
+@import "./assets/fonts/web-icons/web-icons.css";
+@import "./assets/style/variables";
+@import "./assets/style/mixins";
+@import "./assets/style/helper";
+@import "./assets/style/layout";
+@import "./assets/style/header";
+
+* {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+body {
+  font-family: Roboto,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+}

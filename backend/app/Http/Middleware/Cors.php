@@ -6,19 +6,22 @@ use Closure;
 
 class Cors
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
-        header("Access-Control-Allow-Origin", config('app.front_url'));
-        header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Request-With, X-Auth-Token');
-        header('Access-Control-Allow-Credentials: true');
+	/**
+	 * Handle an incoming request.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure $next
+	 * @return mixed
+	 */
+	public function handle($request, Closure $next)
+	{
+		$url = config('app.front_url');
 
-        return $next($request);
-    }
+		header("Access-Control-Allow-Origin: {$url}");
+		header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Request-With, X-Auth-Token');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+		header('Access-Control-Allow-Credentials: true');
+
+		return $next($request);
+	}
 }

@@ -1,0 +1,73 @@
+<div class="container register">
+  <div class="auth__form shadow">
+    <h1>Регистрация</h1>
+
+    <div *ngIf="authError"
+         class="auth__error">{{ authError }}</div>
+
+    <form [formGroup]="registerForm"
+          (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="name">Имя</label>
+        <input id="name"
+               name="name"
+               type="text"
+               class="inputs"
+               formControlName="name"
+               (change)="onChange()">
+
+        <div *ngIf="name.invalid && (name.dirty || name.touched)"
+             class="alert alert-danger">
+          <div *ngIf="name.errors.required">{{ errors.name.required }}</div>
+          <div *ngIf="name.errors.minlength">{{ errors.name.minlength }}</div>
+          <div *ngIf="name.errors.maxlength">{{ errors.name.maxlength }}</div>
+          <div *ngIf="name.errors.pattern">{{ errors.name.pattern }}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email"
+               name="email"
+               type="text"
+               class="inputs"
+               formControlName="email"
+               (change)="onChange()">
+
+        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+             class="alert alert-danger">
+          <div *ngIf="email.errors.required">{{ errors.email.required }}</div>
+          <div *ngIf="email.errors.minlength">{{ errors.email.minlength }}</div>
+          <div *ngIf="email.errors.maxlength">{{ errors.email.maxlength }}</div>
+          <div *ngIf="email.errors.pattern">{{ errors.email.pattern }}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <input id="password"
+               name="password"
+               type="password"
+               class="inputs"
+               formControlName="password"
+               (change)="onChange()">
+
+        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+             class="alert alert-danger">
+          <div *ngIf="password.errors.required">{{ errors.password.required }}</div>
+          <div *ngIf="password.errors.minlength">{{ errors.password.minlength }}</div>
+          <div *ngIf="password.errors.maxlength">{{ errors.password.maxlength }}</div>
+          <div *ngIf="password.errors.passwordPattern">{{ errors.password.passwordPattern }}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input type="submit"
+               value="Регистрация"
+               class="btn">
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+.tabs-nav {
+  display: flex;
+  max-width: 500px;
+
+  align-items: center;
+  justify-content: space-around;
+}
+
+.nav-item {
+  cursor: pointer;
+}

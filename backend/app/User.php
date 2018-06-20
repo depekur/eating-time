@@ -51,8 +51,22 @@ class User extends Authenticatable
         return $this->getKey();
     }
 
+
+    /**
+     * User relationship
+     *
+     */
+
     public function recipes()
     {
         return $this->hasMany('App\Recipe', 'user_id', 'user_id');
+    }
+
+    public function menuRecipes()
+    {
+        return $this->belongsToMany('App\Recipe', 'user_menu_recipes', 'user_id', 'recipe_id')
+                    ->as('menu_info')
+                    ->withPivot('ready_menu_id', 'date', 'eating_order', 'dish_order', 'is_ready_menu_pattern')
+                    ->withTimestamps();
     }
 }

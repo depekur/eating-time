@@ -1,0 +1,62 @@
+<div class="form-group form-group-xl-bp-sm-30"
+     [class.has-error]="fileError">
+
+  <div *ngIf="files.length > 0"
+       class="uploaded-files">
+    <div *ngFor="let file of files; let i = index"
+         class="file-block">
+
+
+      <!--<div class="progress" [style.width]='file.progress + "%"'>file loading progress</div>-->
+
+      <div class="preview">
+
+        <img *ngIf="previewUrl[i]"
+             [src]="previewUrl[i]"
+             class="preview-img"
+             alt="">
+
+        <div class="btn tac"
+             (click)="deleteFile(file)">Удалить
+          <i class="icon delete-file wb-trash"
+             title="Delete file"
+             ></i>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- File uploader label, if needed -->
+  <label *ngIf='label'
+         class="control-label">{{label}}</label>
+
+  <!-- Drop Zone -->
+  <div *ngIf="!(files.length > 0)"
+       class="details-dropzone form-control non-selectable"
+       [class.dragover]="isOverDropZone"
+       (dragover)="isOverDropZone = true"
+       (dragleave)="isOverDropZone = false"
+       (drop)="getDroppedFiles($event)">
+
+    <!-- Drop Zone text and button -->
+    <label for="{{id}}"><span class="label-text">Перетащите фото сюда или</span> <span
+      class="btn btn-default">Выберите файл</span></label>
+
+    <!-- hidden file input -->
+    <input type="file"
+           class="dn"
+           id="{{id}}"
+           [multiple]="isMultiple"
+           (change)="getUpload($event)">
+  </div>
+
+  <!-- Drop zone error -->
+  <small *ngIf="fileError"
+         class="help-block">{{fileError}}
+  </small>
+
+
+
+  <div class="clearfix"></div>
+</div>

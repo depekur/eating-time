@@ -1,0 +1,22 @@
+@import "../../../frontend/src/assets/style/reset";
+@import "../../../frontend/src/assets/style/mixins";
+@import "../../../frontend/src/assets/style/helper";
+@import "../../../frontend/src/assets/style/layout";
+@import "../../../frontend/src/assets/style/header";
+
+
+main {
+	.container {
+		height: 90vh;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.my-menu__btn {
+			color: #c7254e;
+		}
+	}
+}
+
+

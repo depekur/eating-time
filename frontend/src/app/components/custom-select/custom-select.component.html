@@ -1,0 +1,29 @@
+<div class="">
+  <p  *ngIf="title" class="subtitle">{{ title }}</p>
+
+  <div *ngIf="data && showSelected" class="selected-items">
+    <ul>
+      <li *ngFor="let selectedItem of selected">
+        <span>{{ selectedItem.name }}</span>
+        <div class="toggle-selected" (click)="toggleSelected(selectedItem)"></div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="custom-select"
+       [class.full-height]="open">
+    <ul [class.disable]="isDisabled()">
+      <li *ngFor="let item of data"
+          (click)="toggleSelected(item)"
+          [class.selected]="item.selected">
+
+        <span>{{ item.name }}</span>
+        <input type="checkbox"
+               [checked]="item.selected"
+               [disabled]="isDisabled() && !item.selected">
+      </li>
+    </ul>
+  </div>
+</div>
+
+

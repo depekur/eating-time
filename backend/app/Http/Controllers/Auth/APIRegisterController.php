@@ -14,7 +14,11 @@ class APIRegisterController extends Controller
 {
     public function register(Request $request)
     {
-        $credentials = $request->only('username', 'email', 'password');
+        $credentials = $request->only('name', 'email', 'password');
+
+		 $messages = array(
+			 'email.unique' => 'Такое мыло уже занято, йоу',
+		 );
 
         $rules = [
             'name' => 'required|max:255|unique:users',
@@ -22,18 +26,16 @@ class APIRegisterController extends Controller
             'password' => 'required|min:6',
         ];
 
-        $validator = Validator::make($credentials, $rules);
+        $validator = Validator::make($credentials, $rules, $messages);
 
         if ($validator->fails()) {
-            return response()->json(['success'=> false, 'error'=> $validator->errors()]);
+            return response()->json($validator->errors(), 503);
         }
 
         User::create([
-            'name' => $request->get('username'),
+            'name' => $request->get('name'),
             'email' => $request->get('email'),
-            'password' => \Illuminate\Support\Facades\Hash::make($request->get('password')),
-            'role' => 'user',
-            'notifications' => 0
+            'password' => \Illuminate\Support\Facades\Hash::make($request->get('password'))
         ]);
 
         $user = User::first();

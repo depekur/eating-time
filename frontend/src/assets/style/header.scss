@@ -1,0 +1,47 @@
+.header {
+	padding-top: 10px;
+
+	.container {
+		display: flex;
+
+	}
+
+	.header__logo {
+		flex: 3;
+
+		a {
+			display: block;
+
+			width: 100px;
+			height: 50px;
+
+			background: #fafafa;
+
+			color: #2b6aa4;
+			font-size: 30px;
+			text-decoration: none;
+		}
+	}
+
+	.top-nav {
+		flex: 1;
+
+		ul {
+			display: flex;
+
+			height: 100%;
+
+			li {
+				align-self: center;
+				flex-grow: 1;
+			}
+
+			li.top-nav__recipes {
+				flex-grow: 6;
+			}
+		}
+	}
+
+
+
+}
