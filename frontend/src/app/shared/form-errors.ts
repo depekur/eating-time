@@ -3,7 +3,7 @@ export const validationMessages = {
     required: 'Вы забыли ввесли email',
     maxlength: 'Слишком длинный адрес',
     minlength: 'Слишком короткий адрес',
-    pattern: 'Не похоже на email, попробуй еще'
+    pattern: 'Невалидный email'
   },
   password: {
     required: 'Введите пароль',
@@ -12,9 +12,22 @@ export const validationMessages = {
     passwordPattern: 'Пароль должен содержать цифры и буквы'
   },
   name: {
-    required: 'Please provide an name',
-    maxlength: 'Max name length is 50 symbols',
-    minlength: 'Min name length is 3 symbols',
-    pattern: 'Name must contain only letters'
+    required: 'Введите свое имя',
+    maxlength: 'Слишком длинное имя',
+    minlength: 'Слишком короткое имя',
+    pattern: 'Имя должно содержать только буквы'
+  },
+  recipe: {
+    photo: {
+      required: 'Фото рецепта должно быть обязательно',
+    },
+    title: {
+      required: 'Введите название рецепта',
+    },
+    body: {
+      required: 'Введите которкое описание рецепта',
+    }
   }
+
+
 };

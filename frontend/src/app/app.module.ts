@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { JwtService } from './services/jwt.service';
-import { HttpClientModule } from '@angular/common/http';
+import { JwtService } from './shared/services/jwt.service';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -16,6 +16,7 @@ import { NgRedux, NgReduxModule, DevToolsExtension } from '@angular-redux/store'
 import { IAppState, INITIAL_STATE, rootReducer } from "./store";
 import { CommentsComponent } from './components/comments/comments.component';
 import { IngredientsSelectComponent } from './components/ingredients-select/ingredients-select.component';
+import {JwtInterceptor} from "./jwt.interceptor";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,12 @@ import { IngredientsSelectComponent } from './components/ingredients-select/ingr
   ],
   providers: [
     JwtService,
-    CustomValidations
+    CustomValidations,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

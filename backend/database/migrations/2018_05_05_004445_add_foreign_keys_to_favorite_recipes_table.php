@@ -14,8 +14,8 @@ class AddForeignKeysToFavoriteRecipesTable extends Migration {
 	{
 		Schema::table('favorite_recipes', function(Blueprint $table)
 		{
-			$table->foreign('recipe_id', 'favorite_recipe_id')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('user_id', 'favorite_user_id')->references('user_id')->on('users')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('recipe_id', 'favorite_recipe_id')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('user_id', 'favorite_user_id')->references('user_id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

@@ -14,8 +14,8 @@ class AddForeignKeysToRecipeCategoriesTable extends Migration {
 	{
 		Schema::table('recipe_categories', function(Blueprint $table)
 		{
-			$table->foreign('category_id', 'category_id')->references('category_id')->on('category')->onUpdate('NO ACTION')->onDelete('NO ACTION');
-			$table->foreign('recipe_id', 'recipe_id_cat')->references('recipe_id')->on('recipes')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+			$table->foreign('category_id', 'category_id')->references('category_id')->on('category')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('recipe_id', 'recipe_id_cat')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

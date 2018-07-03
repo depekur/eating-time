@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { Tabs, Tab } from "../components/tabs/tabs.component";
 
 import { CustomSelectComponent } from "../components/custom-select/custom-select.component";
+import {FormErrorsComponent} from "../components/form-errors/form-errors.component";
 
 @NgModule({
   imports: [
@@ -17,12 +18,16 @@ import { CustomSelectComponent } from "../components/custom-select/custom-select
 
     CustomSelectComponent,
     Tabs,
-    Tab
+    Tab,
+
+    FormErrorsComponent
   ],
   declarations: [
     CustomSelectComponent,
     Tabs,
-    Tab
+    Tab,
+
+    FormErrorsComponent
   ]
 })
 export class SharedModule { }

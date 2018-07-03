@@ -17,7 +17,7 @@ import { LoginGuard } from './guards/login.guard';
         children: [
           {path: '', pathMatch: 'full', redirectTo: 'login'},
           {path: 'login', component: LoginComponent, canActivate: [LoginGuard]},
-          {path: 'register', component: RegistrationComponent},
+          {path: 'register', component: RegistrationComponent, canActivate: [LoginGuard]},
           {path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [LoginGuard]},
           {path: 'password-recovery', component: ResetPasswordComponent}
         ]

@@ -28,15 +28,6 @@ Route::post('recover', 'Auth\ApiRecoverPassController@recover');
 
 //Route::get('seed-ingredients', 'IngredientsSeeder@index');
 
-/**
- *  files api
- */
-Route::post('file/upload', 'FileController@upload');
-Route::delete('file/delete/{id}', 'FileController@delete');
-
-
-
-
 
 
 Route::get('/recipes-meta', 'RecipeController@recipeMeta');
@@ -45,18 +36,33 @@ Route::get('/recipes-meta', 'RecipeController@recipeMeta');
 
 Route::get('/ingredients/{value}', 'IngredientController@search');
 
+Route::get('/recipe/{id}', 'RecipeController@getRecipeById');
+Route::post('/recipes', 'RecipeController@getAllRecipes');
 
 
-
-// only for logged users
+/**
+ *  only for logged users
+ */
 Route::group(['middleware' => 'jwt.auth'], function() {
 
-	Route::post('logout', 'Auth\APILogoutController@logout');
+  /**
+   *  files api
+   */
+  Route::post('file/upload', 'FileController@upload');
+  Route::delete('file/delete/{id}', 'FileController@delete');
 
-	//Route::get('/', 'RecipeController@index');
+  /**
+   *  recipe api
+   */
+  Route::post('add-recipe', 'RecipeController@saveRecipe');
 
-	Route::get('users', function(Request $request) {
-        return $request->user();
-    });
+  /**
+   *  user api
+   */
+  Route::get('/user', 'UserController@info');
 
+  /**
+   *  auth api
+   */
+  Route::post('logout', 'Auth\APILogoutController@logout');
 });

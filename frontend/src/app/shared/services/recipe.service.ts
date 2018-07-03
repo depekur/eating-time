@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, Subject } from 'rxjs/index';
-import {apiUrls} from "../app-config";
+import {apiUrls} from "../../app-config";
 import {ReplaySubject} from "rxjs/Rx";
 
+interface createRecipeResponse {
+  id: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +25,18 @@ export class RecipeService {
 
   constructor(private http: HttpClient) {
     this.getRecipesData();
+  }
+
+  getRecipes(page, query?): Observable<any> {
+    return this.http.post(`${apiUrls.recipe.all}${page}`, 'test');
+  }
+
+  getSingleRecipe(id: number): Observable<any> {
+    return this.http.get(apiUrls.recipe.single + id);
+  }
+
+  addRecipe(data): Observable<any> {
+    return this.http.post(apiUrls.recipe.add, data);
   }
 
   getRecipeMetaData(): Observable<any> {

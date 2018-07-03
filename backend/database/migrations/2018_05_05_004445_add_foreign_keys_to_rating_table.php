@@ -15,7 +15,7 @@ class AddForeignKeysToRatingTable extends Migration {
 		Schema::table('rating', function(Blueprint $table)
 		{
 			$table->foreign('comment_id', 'comment_id_rating')->references('comment_id')->on('comments')->onUpdate('CASCADE')->onDelete('CASCADE');
-			$table->foreign('recipe_id', 'recipe_id_rating')->references('recipe_id')->on('recipes')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+			$table->foreign('recipe_id', 'recipe_id_rating')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

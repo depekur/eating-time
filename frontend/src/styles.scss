@@ -3,8 +3,16 @@
 @import "./assets/style/variables";
 @import "./assets/style/mixins";
 @import "./assets/style/helper";
+
+@import "./assets/style/components/btn";
+@import "./assets/style/components/links";
+@import "./assets/style/components/inputs";
+@import "./assets/style/components/card";
+
 @import "./assets/style/layout";
 @import "./assets/style/header";
+
+@import "./assets/style/lock-element"; // preloader
 
 * {
   box-sizing: border-box;

@@ -3,17 +3,19 @@ import {Component, Input} from "@angular/core";
 @Component({
   selector: 'tabs',
   template: `
-    <ul class="tabs-nav"
+    <nav class="tabs-nav"
         [ngClass]="classes">
-      <li class="nav-item btn"
-          *ngFor="let tab of tabs" (click)="selectTab(tab)">
-        <a class="nav-link"
-           [class.disabled]="tab.disabled"
-           [class.active]="tab.active">
+      <div class="tabs-nav__item btn"
+          *ngFor="let tab of tabs; let i = index;" 
+          (click)="selectTab(tab)"
+          [class.disabled]="tab.disabled"
+          [class.error]="tab.error"
+          [class.active]="tab.active">
+        <a class="nav-link nav-item ">
           <span>{{tab.tabTitle}}</span>
         </a>
-      </li>
-    </ul>
+      </div>
+    </nav>
 
     <div class="tab-wrapper">
       <ng-content></ng-content>
@@ -57,6 +59,7 @@ export class Tabs {
 })
 export class Tab {
   @Input() tabTitle: string;
+  @Input() error: string;
   @Input() disabled: boolean = false;
 
   active: boolean = false;

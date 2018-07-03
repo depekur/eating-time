@@ -10,7 +10,6 @@ const recipesRoutes:Routes = [
     path: '', component: RecipeComponent,
     children: [
       {path: '', pathMatch: 'full', redirectTo: 'all'},
-      {path: 'add', loadChildren: './create-recipe/create-recipe.module#CreateRecipeModule'},
       {path: 'all', component: RecipesListComponent},
       {path: ':id', component: SingleRecipeComponent}
     ]

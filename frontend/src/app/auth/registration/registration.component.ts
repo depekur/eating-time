@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { patterns, counts } from '../../shared/form-patterns';
-import { JwtService } from '../../services/jwt.service';
+import { JwtService } from '../../shared/services/jwt.service';
 import { validationMessages } from '../../shared/form-errors';
 import { CustomValidations } from '../../shared/custom-validation';
-import { LoginResponse } from '../../model/auth.model';
+import { LoginResponse } from '../auth.model';
+import {APP_EVENTS, IAppState} from "../../store";
+import {NgRedux} from "@angular-redux/store";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-registration',
@@ -22,6 +25,8 @@ export class RegistrationComponent implements OnInit {
   constructor(private customValidations: CustomValidations,
               private authService: AuthService,
               private jwtService: JwtService,
+              private ngRedux: NgRedux<IAppState>,
+              private userService: UserService,
               private router: Router) { }
 
   ngOnInit() {
@@ -64,11 +69,12 @@ export class RegistrationComponent implements OnInit {
     this.authService.register(this.registerForm.value)
       .subscribe(
         (data: LoginResponse) => {
-          console.log(data);
-
           this.jwtService.setToken(data.token);
+          this.ngRedux.dispatch({ type: APP_EVENTS.LOGIN });
+          this.userService.getUser();
 
-          //this.router.navigate(['/menu']);
+          this.isSending = false;
+          this.router.navigate(['/recipe/all']);
         },
         error => {
           this.registerForm.reset({

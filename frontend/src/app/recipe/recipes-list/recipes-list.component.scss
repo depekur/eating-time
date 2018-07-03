@@ -1,0 +1,36 @@
+.recipes-list {
+  min-height: 100%;
+  padding: 10px;
+
+  .recipe {
+    margin-bottom: 30px;
+    padding: 15px 0 5px;
+
+    h2 {
+      //padding: 10px;
+    }
+
+    figure {
+      max-height: 300px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .recipe__info {
+      span {
+        display: inline-block;
+        padding: 0 10px;
+      }
+    }
+  }
+
+
+
+  .load-more {
+    text-align: center;
+  }
+
+}

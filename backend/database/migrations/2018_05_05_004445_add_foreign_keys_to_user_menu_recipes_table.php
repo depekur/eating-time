@@ -14,9 +14,9 @@ class AddForeignKeysToUserMenuRecipesTable extends Migration {
 	{
 		Schema::table('user_menu_recipes', function(Blueprint $table)
 		{
-			$table->foreign('ready_menu_id', 'ready_menu_id')->references('ready_menu_id')->on('ready_menu')->onUpdate('NO ACTION')->onDelete('NO ACTION');
-			$table->foreign('recipe_id', 'recipe_id_menu')->references('recipe_id')->on('recipes')->onUpdate('NO ACTION')->onDelete('NO ACTION');
-			$table->foreign('user_id', 'user_id_menu')->references('user_id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+			$table->foreign('ready_menu_id', 'ready_menu_id')->references('ready_menu_id')->on('ready_menu')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('recipe_id', 'recipe_id_menu')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('user_id', 'user_id_menu')->references('user_id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

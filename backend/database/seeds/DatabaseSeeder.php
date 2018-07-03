@@ -25,11 +25,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'ужин'
         ]);
 
-        DB::table('countries')->insert([
+        DB::table('countriesData')->insert([
             'name' => 'Украина'
         ]);
 
-        DB::table('countries')->insert([
+        DB::table('countriesData')->insert([
             'name' => 'Украина'
         ]);
     }

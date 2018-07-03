@@ -12,7 +12,7 @@ class IngredientsSeeder extends Controller
 
 		 $data = json_decode(file_get_contents($path), true);
 
-		 //App\Ingredient::insert($data);
+		 App\Ingredient::insert($data);
 
 		 //dd($json);
 

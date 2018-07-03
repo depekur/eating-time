@@ -13,6 +13,11 @@ class Recipe extends Model
         return $this->belongsTo('App\User', 'user_id', 'user_id');
     }
 
+    public function country()
+    {
+      return $this->belongsTo('App\Country', 'country_id', 'country_id');
+    }
+
     public function steps()
     {
         return $this->hasMany('App\RecipeStep', 'recipe_id', 'recipe_id');
@@ -25,7 +30,9 @@ class Recipe extends Model
 
     public function ingredients()
     {
-        return $this->belongsToMany('App\Ingredient', 'recipe_ingredients', 'recipe_id', 'ingredients_id');
+        return $this->belongsToMany('App\Ingredient', 'recipe_ingredients', 'recipe_id', 'ingredients_id')
+          ->as('info')
+          ->withPivot('count', 'measure');
     }
 
     public function destinations()

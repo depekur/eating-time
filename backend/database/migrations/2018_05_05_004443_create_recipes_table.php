@@ -19,7 +19,7 @@ class CreateRecipesTable extends Migration {
 			$table->text('body', 65535)->nullable();
 			$table->boolean('is_short_recipe')->nullable()->default(0);
 			$table->integer('calories')->nullable();
-			$table->integer('cooking_time')->nullable();
+			$table->string('cooking_time')->nullable();
 			$table->smallInteger('country_id')->unsigned()->nullable()->index('country_id_idx');
 			$table->integer('user_id')->unsigned()->index('user_id');
 			$table->string('img_name', 50)->nullable();

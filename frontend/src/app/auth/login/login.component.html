@@ -1,11 +1,14 @@
 <div class="container login">
-  <div class="auth__form shadow">
+  <div class="auth__form card lock-preloader"
+       [class.lock-element]="isSending">
     <h1>Вход</h1>
 
     <div *ngIf="authError"
          class="auth__error">{{ authError }}</div>
 
     <form [formGroup]="loginForm"
+          class="lock-preloader"
+          [class.lock-element]="isSending"
           (ngSubmit)="onSubmit()">
 
       <div class="form-group">

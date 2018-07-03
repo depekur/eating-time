@@ -13,19 +13,14 @@ class FileController extends Controller
       ]);
 
       $file = $request->file('photo');
-      $file->storePublicly('images');
+      //$file->storePublicly('images');
+      $file->store('temp');
      // $fileName = $file->getClientOriginalName();
       $fileName = $file->hashName();
 
-
-      //$file->store('images');
-
-      $url = Storage::url($fileName);
-
       return
         [
-          'id' => $fileName,
-          'url' => $url
+          'id' => $fileName
         ];
     }
 

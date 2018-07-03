@@ -14,7 +14,7 @@ class AddForeignKeysToRecipeStepsTable extends Migration {
 	{
 		Schema::table('recipe_steps', function(Blueprint $table)
 		{
-			$table->foreign('recipe_id', 'recipe_id')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('recipe_id', 'recipe_id')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

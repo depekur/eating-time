@@ -1,11 +1,28 @@
 .tabs-nav {
   display: flex;
   max-width: 500px;
+  margin-bottom: 20px;
 
   align-items: center;
   justify-content: space-around;
 }
 
-.nav-item {
+.tabs-nav__item {
   cursor: pointer;
+
+  &:not(:last-child) {
+
+  }
+
+  //&.active {
+  //  background-color: #2ab27b;
+  //  color: #fafafa;
+  //
+  //  &:hover {
+  //    background-color: #2ab21c;
+  //  }
+  //}
 }
+
+
+

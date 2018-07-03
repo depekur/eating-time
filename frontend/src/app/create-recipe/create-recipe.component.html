@@ -1,0 +1,306 @@
+<div class="container">
+
+    <form [formGroup]="createRecipeForm"
+          (ngSubmit)="onSubmit()"
+          class="add-recipe__form lock-preloader"
+          [class.lock-element]="isSending"
+          #createRecipe>
+
+      <section class="form-group add-recipe__submit">
+        <input type="submit"
+               class="btn active add-recipe__submit"
+               value="Сохранить рецепт">
+      </section>
+
+
+      <tabs #createTabs>
+
+          <!------------------------->
+          <!-- selected categoriesData -->
+          <!--- Chosen categoriesData --->
+          <!------ main recipe ------>
+          <!------------------------->
+          <tab #tab1 tabTitle="Рецепт">
+
+              <!------------------------->
+              <!-- main recipe -->
+              <!------------------------->
+              <section class="add-recipe__main-fields">
+
+                <div class="form-group">
+                  <label for="photo">Фото</label>
+                  <file-uploader
+                    id="photo"
+                    formControlName="photo"
+                    [id]="'photo_input'"
+                    [maxFilesCount]="1"
+                    [maxFileSizeMb]="10"
+                    (isFileProcessing)="isFileProcessing = $event">
+                  </file-uploader>
+
+                  <div *ngIf="photo.invalid && (photo.dirty || photo.touched || isSubmitted)"
+                       class="alert alert-danger">
+                    <div *ngIf="photo.errors.required">{{ errors.recipe.photo.required }}</div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="title" >Название блюда</label>
+                  <input type="text"
+                         name="title"
+                         id="title"
+                         class="inputs"
+                         placeholder="Название блюда"
+                         formControlName="title">
+
+                  <div *ngIf="title.invalid && (title.dirty || title.touched || isSubmitted)"
+                       class="alert alert-danger">
+                    <div *ngIf="title.errors.required">{{ errors.recipe.title.required }}</div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="body">Описание блюда</label>
+                  <textarea name="body"
+                            id="body"
+                            class="inputs"
+                            placeholder="Описание блюда"
+                            formControlName="body"></textarea>
+
+                  <div *ngIf="body.invalid && (body.dirty || body.touched || isSubmitted)"
+                       class="alert alert-danger">
+                    <div *ngIf="body.errors.required">{{ errors.recipe.body.required }}</div>
+                  </div>
+                </div>
+
+                <div class="">
+                  <div class="form-group ">
+                    <label for="cookingTime">Время готовки</label>
+                    <input type="text"
+                           name="cookingTime"
+                           id="cookingTime"
+                           class="inputs"
+                           placeholder="Время готовки"
+                           formControlName="cookingTime">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="servingsCount">Количество порций</label>
+                    <input type="text"
+                           name="servingsCount"
+                           id="servingsCount"
+                           class="inputs"
+                           placeholder="Количество порций"
+                           formControlName="servingsCount">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="calories">Калории</label>
+                  <input type="text"
+                         name="calories"
+                         id="calories"
+                         class="inputs"
+                         placeholder="Калории"
+                         formControlName="calories">
+                </div>
+
+
+                <!------------------------->
+                <!-- Chosen categoriesData -->
+                <!------------------------->
+                <p class="add-recipe__selected-info form-group">
+                    <span class="card"
+                          (click)="toggleSelected(destination.id, metaTypes.DESTINATIONS)"
+                          *ngFor="let destination of createRecipeForm.value.destinations">
+                      {{ destination.name }}
+                      <i class="fas fa-times"></i>
+                    </span>
+
+                  <span class="card"
+                        (click)="toggleSelected(cat.id, metaTypes.CATEGORIES)"
+                        *ngFor="let cat of createRecipeForm.value.categories">
+                      {{ cat.name }}
+                      <i class="fas fa-times"></i>
+                    </span>
+
+                  <span class="card"
+                        (click)="toggleSelected(country.id, metaTypes.COUNTRIES)"
+                        *ngFor="let country of createRecipeForm.value.countries">
+                      {{ country.name }}
+                      <i class="fas fa-times"></i>
+                    </span>
+                </p>
+
+
+                <!------------------------->
+                <!-- selected categoriesData -->
+                <!------------------------->
+                <div class="add-recipe__selected-fields">
+
+
+                  <div class="form-group">
+                    <custom-select *ngIf="destinationsData"
+                                   formControlName="destinations"
+                                   [title]="'Назначение рецепта'"
+                                   [data]="destinationsData">
+                    </custom-select>
+                  </div>
+
+                  <div class="form-group">
+                    <custom-select *ngIf="categoriesData"
+                                   formControlName="categories"
+                                   [title]="'Категория рецепта'"
+                                   [data]="categoriesData">
+                    </custom-select>
+                  </div>
+
+                  <div class="form-group">
+                    <custom-select *ngIf="countriesData"
+                                   [title]="'Кухня'"
+                                   formControlName="countries"
+                                   [multiple]="false"
+                                   [data]="countriesData">
+                    </custom-select>
+                  </div>
+                </div>
+
+              </section>
+
+          </tab>
+
+
+          <!----------------->
+          <!-- Ингридиенты -->
+          <!----------------->
+          <tab tabTitle="Ингридиенты">
+
+            <section class="add-recipe__ingredients">
+
+              <div class="search-bg"
+                   *ngIf="isSearchBgVisible"
+                   (click)="closeSearch()"></div>
+
+              <div formArrayName="ingredients"
+                   *ngFor="let ing of createRecipeForm.get('ingredients').controls; let i = index"
+                   class="">
+
+                <div [formGroupName]="i" class="form-group ingredients__form">
+
+                  <label class="ingredients__name">Ингридиент
+                      <input type="text"
+                             id="name-{{i}}"
+                             formControlName="name"
+                             class="inputs"
+                             (focus)="closeSearch()"
+                             (input)="searchIngredient(ing.controls.name.value, i)"
+                             placeholder="Ингридиент" >
+                    <div *ngIf="searchIngredients[i]"
+                         class="search-ingredient card">
+                      <ul>
+                        <li *ngFor="let searchIng of searchIngredients[i]"
+                            (click)="selectIngFromSearch(searchIng, i)">
+                          {{ searchIng.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </label>
+
+                  <label class="ingredients__count">Количество
+                    <input type="text"
+                           formControlName="count"
+                           class="inputs "
+                           placeholder="Количество">
+                  </label>
+
+                  <label for="">Мера
+                    <select formControlName="measure"
+                            class="inputs ingredients__measure"
+                            id="">
+                      <option *ngFor="let measure of measures; let i = index;"
+                              [value]="measure">
+                        {{ measure }}
+                      </option>
+                    </select>
+                  </label>
+
+                  <!--<input type="text"-->
+                         <!--hidden-->
+                         <!--formControlName="id"-->
+                         <!--[value]="i+1">-->
+
+                  <button (click)="removeIngredient(i)"
+                          type="button"
+                          class="btn--red">удалить</button>
+                </div>
+              </div>
+
+              <div class="form-group tac">
+                <button (click)="addNewIngredientFields()"
+                        type="button"
+                        class="btn">Добавить ингридиент</button>
+              </div>
+            </section>
+          </tab>
+
+
+          <!----------------->
+          <!------ шаги ----->
+          <!----------------->
+          <tab tabTitle="Шаги">
+
+            <section class="add-recipe__steps">
+              <div formArrayName="steps"
+                   *ngFor="let ing of createRecipeForm.get('steps').controls; let i = index">
+
+                <div [formGroupName]="i">
+                  <p class="steps__number">Шаг номер {{ i+1 }}</p>
+
+                  <div class="form-group">
+                    <label for="step_text-{{ i }}">Описание шага</label>
+                    <textarea name="step_text"
+                              id="step_text-{{ i }}"
+                              class="inputs"
+                              placeholder="Описание шага"
+                              formControlName="step_text"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="step_photo-{{ i }}">Фото шага</label>
+                    <file-uploader
+                      id="step_photo-{{ i }}"
+                      formControlName="step_photo"
+                      [id]="'step_photo_input-'+i"
+                      [maxFilesCount]="1"
+                      [maxFileSizeMb]="10"
+                      (isFileProcessing)="isFileProcessing = $event">
+                    </file-uploader>
+                  </div>
+
+                  <button (click)="removeStep(i)"
+                          type="button"
+                          class="btn--red">удалить</button>
+
+                </div>
+              </div>
+
+              <div class="form-group tac">
+                <button class="btn"
+                        type="button"
+                        (click)="addNewStepFields()">Добавить шаг</button>
+              </div>
+            </section>
+
+          </tab>
+
+      </tabs>
+
+
+      <section class="form-group add-recipe__submit">
+        <input type="submit"
+               class="btn active add-recipe__submit"
+               [disabled]="!createRecipeForm.valid"
+               value="Сохранить рецепт">
+      </section>
+    </form>
+</div>

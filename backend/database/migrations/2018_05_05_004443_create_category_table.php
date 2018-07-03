@@ -16,8 +16,6 @@ class CreateCategoryTable extends Migration {
 		{
 			$table->increments('category_id');
 			$table->string('category_name');
-			$table->boolean('is_have_parent')->nullable();
-			$table->integer('parent_id')->unsigned()->nullable();
 			$table->text('category_description', 65535)->nullable();
 		});
 	}

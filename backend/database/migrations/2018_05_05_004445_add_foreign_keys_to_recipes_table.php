@@ -14,8 +14,8 @@ class AddForeignKeysToRecipesTable extends Migration {
 	{
 		Schema::table('recipes', function(Blueprint $table)
 		{
-			$table->foreign('user_id', 'author_id')->references('user_id')->on('users')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('country_id', 'country_id')->references('country_id')->on('countries')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+			$table->foreign('user_id', 'author_id')->references('user_id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('country_id', 'country_id')->references('country_id')->on('countries')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

@@ -14,8 +14,8 @@ class AddForeignKeysToRecipeIngredientsTable extends Migration {
 	{
 		Schema::table('recipe_ingredients', function(Blueprint $table)
 		{
-			$table->foreign('ingredients_id', 'ingredients_id_fk')->references('id')->on('ingredients')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('recipe_id', 'recipe_id_fk')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('ingredients_id', 'ingredients_id_fk')->references('id')->on('ingredients')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('recipe_id', 'recipe_id_fk')->references('recipe_id')->on('recipes')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 

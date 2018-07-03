@@ -1,9 +1,37 @@
 import {Ingredient} from "./ingredient.model";
 
+export const CokingTimeMeasure = [
+  'мин.',
+  'ч.',
+  'д'
+];
+
+export interface ShortRecipe {
+  calories: number;
+  cooking_time: number;
+  destinations: {
+    destination_id: number;
+    name: string;
+  };
+  categories: {
+    category_id: number;
+    category_name: string;
+  };
+  img_name: string;
+  is_short_recipe: string;
+  recipe_id: string;
+  recipe_link: string;
+  seo_description: string;
+  servings_count: number;
+  title: string;
+  user_id: number;
+}
+
+
 export const RECIPE_META_TYPES = {
-  COUNTRIES: 'countries',
-  DESTINATIONS: 'destinations',
-  CATEGORIES: 'categories',
+  COUNTRIES: 'countriesData',
+  DESTINATIONS: 'destinationsData',
+  CATEGORIES: 'categoriesData',
   INGREDIENTS: 'ingredients'
 };
 
@@ -81,8 +109,8 @@ export class Recipe {
       this.recipe_link = recipeData.recipe_link;
       this.servingsCount = recipeData.servingsCount;
 
-      this.categories = recipeData.categories;
-      this.destinations = recipeData.destinations;
+      this.categories = recipeData.categoriesData;
+      this.destinations = recipeData.destinationsData;
 
       this.ingredients = recipeData.ingredients.map(ing => new Ingredient(ing)) || [];
       this.steps = stepsFactory(recipeData.steps) || [];

@@ -1,0 +1,168 @@
+$transitionDelay: 0.3s;
+
+// signal
+
+.signal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	width: 20px;
+	height: 20px;
+
+	margin: -10px 0 0 -10px;
+
+	border: 2px solid #5bc0de;
+	border-radius: 20px;
+
+	opacity: 0;
+
+	animation: pulsate 1s ease-out;
+	animation-iteration-count: infinite;
+}
+
+@keyframes pulsate {
+
+	0% {
+		transform: scale(.1);
+		opacity: 0.0;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(1.2);
+		opacity: 0;
+	}
+
+}
+
+.lock-preloader {
+	&:before {
+		content: '';
+
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		width: 100%;
+		height: 100%;
+
+		opacity: 0;
+		z-index: -1;
+	}
+}
+
+.lock-element {
+
+	position: relative;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+	&:before {
+		content: '';
+
+		position: absolute;
+		z-index: 998;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		width: 100%;
+		height: 100%;
+
+		opacity: 1;
+		background-color: rgba(255,255,255,0);
+	}
+
+	&:not(.before-transparent) {
+
+		&:before {
+			background-color: rgba(255,255,255,0.8);
+			transition: opacity $transitionDelay, background-color $transitionDelay 0s ease-in-out;
+		}
+	}
+
+	&.lock-preloader {
+
+		&:after {
+
+			content: '';
+			display: block;
+			z-index: 999;
+
+			color: #ccc;
+			text-align: center;
+			font-size: 0;
+			line-height: 1;
+
+			@extend .signal;
+
+		}
+
+		&.lock-transparent {
+			&:before {
+				background-color: transparent;
+			}
+
+			> * {
+				opacity: 0.2;
+				transition: opacity $transitionDelay 0s ease-in-out;
+			}
+		}
+
+	}
+
+	.lock-preloader,
+	.content-preloader
+	{
+		&:after {
+			display: none;
+		}
+	}
+
+}
+
+// white signal
+
+.preloader-white.lock-element.lock-preloader:after,
+.preloader-white .lock-element.lock-preloader:after
+{
+	border-color: white;
+}
+
+// lock all page
+
+.lock-page {
+	&.lock-preloader {
+		&.lock-element {
+			&:after {
+				position: fixed;
+			}
+
+			.totop {
+				z-index: 2;
+			}
+		}
+	}
+}
+
+// locks all page 100% x 100%
+
+.lock-page-fixed {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 99999999;
+  padding-bottom: 200%;
+}

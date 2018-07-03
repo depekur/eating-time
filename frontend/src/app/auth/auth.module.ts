@@ -14,7 +14,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     SharedModule,
     CommonModule,
-    AuthRoutingModule
+    AuthRoutingModule,
   ],
   declarations: [
     LoginComponent,
