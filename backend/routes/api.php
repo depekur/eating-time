@@ -30,7 +30,7 @@ Route::post('recover', 'Auth\ApiRecoverPassController@recover');
 
 
 
-Route::get('/recipes-meta', 'RecipeController@recipeMeta');
+Route::get('/filters', 'RecipeController@filters');
 //Route::get('/ingredients', 'RecipeController@ingredients');
 
 

@@ -1,159 +1,60 @@
 import {Ingredient} from "./ingredient.model";
+import { User } from "./user.model";
+import {Paginator} from "./pagination.model";
 
-export const CokingTimeMeasure = [
-  'мин.',
-  'ч.',
-  'д'
-];
+export interface RecipesResponse {
+  paginator: Paginator;
+  recipes: ShortRecipe[];
+}
 
 export interface ShortRecipe {
-  calories: number;
-  cooking_time: number;
-  destinations: {
-    destination_id: number;
-    name: string;
-  };
-  categories: {
-    category_id: number;
-    category_name: string;
-  };
-  img_name: string;
-  is_short_recipe: string;
-  recipe_id: string;
-  recipe_link: string;
-  seo_description: string;
-  servings_count: number;
+  id: string;
+  img: string;
   title: string;
-  user_id: number;
+  calories: number;
+  cookingTime: number;
+  servingsCount: number;
+  categories: RecipeCategory[];
+  destinations: RecipeDestination[];
 }
 
-
-export const RECIPE_META_TYPES = {
-  COUNTRIES: 'countriesData',
-  DESTINATIONS: 'destinationsData',
-  CATEGORIES: 'categoriesData',
-  INGREDIENTS: 'ingredients'
-};
-
-export class RecipeCategory {
+export interface FullRecipe {
   id: number;
-  name: string;
-  parentId: number;
-
-  constructor(recipeData) {
-    if (recipeData) {
-      this.id = recipeData.id;
-      this.name = recipeData.name;
-    }
-  }
-}
-
-export class RecipeDestination {
-  id: number;
-  name: string;
-
-  constructor(recipeData) {
-    if (recipeData) {
-      this.id = recipeData.id;
-      this.name = recipeData.name;
-    }
-  }
-}
-
-export class RecipeCountry {
-  id: number;
-  name: string;
-
-  constructor(recipeData?: any) {
-    if (recipeData) {
-      this.id = recipeData.id;
-      this.name = recipeData.name;
-    }
-  }
-}
-
-export class Recipe {
   title: string;
   body: string;
-  is_short_recipe: boolean;
-  calories: number;
-  cooking_time: number;
-  user_id: number;
-  img: string;
-  recipe_link?: string;
   servingsCount: number;
-
+  calories: number;
+  cookingTime: number;
+  img: string;
+  recipeLink?: string;
+  isShortRecipe: boolean;
+  comments; // todo implement comments ??? and move to another request ???
+  rating; // todo implement rating
+  user: User;
   country: RecipeCountry;
   categories: RecipeCategory[];
   destinations: RecipeDestination[];
-
   ingredients: Ingredient[];
   steps: RecipeStep[];
-
-  comments;
-  raiting;
-
-  constructor(recipeData?: any) {
-    if (recipeData) {
-      this.title = recipeData.title;
-      this.body = recipeData.body;
-      this.is_short_recipe = recipeData.is_short_recipe;
-      this.calories = recipeData.calories;
-      this.cooking_time = recipeData.cooking_time;
-
-      this.country.id = recipeData.country.id;
-      this.country.name = recipeData.country.name;
-
-      this.user_id = recipeData.user_id;
-      this.img = recipeData.img;
-      this.recipe_link = recipeData.recipe_link;
-      this.servingsCount = recipeData.servingsCount;
-
-      this.categories = recipeData.categoriesData;
-      this.destinations = recipeData.destinationsData;
-
-      this.ingredients = recipeData.ingredients.map(ing => new Ingredient(ing)) || [];
-      this.steps = stepsFactory(recipeData.steps) || [];
-    }
-  }
 }
 
-export class RecipeStep {
-  number: number;
-  description: string;
+export interface RecipeCategory {
+  id: number;
+  name: string;
+}
+
+export interface RecipeDestination {
+  id: number;
+  name: string;
+}
+
+export interface RecipeCountry {
+  id: number;
+  name: string;
+}
+
+export interface RecipeStep {
+  id: number;
+  body: string;
   img: string;
-
-  constructor(stepData?: any) {
-    if (stepData) {
-      this.number = stepData.number;
-      this.description = stepData.description;
-      this.img = stepData.img;
-    }
-  }
-}
-
-export class RecipeIngredient {
-  ingId: number;
-  ingName: string;
-  ingCount: string;
-  ingMeasure: string;
-
-  constructor(ingData?: any) {
-    if (ingData) {
-      this.ingId = ingData.ingId;
-      this.ingName = ingData.ingName;
-      this.ingCount = ingData.ingCount;
-      this.ingMeasure = ingData.ingMeasure;
-    }
-  }
-}
-
-function stepsFactory(stepData): RecipeStep[] {
-  let steps = [];
-
-  stepData.map(step => {
-    steps.push(new RecipeStep(step));
-  });
-
-  return steps;
 }

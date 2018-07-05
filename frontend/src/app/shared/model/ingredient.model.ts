@@ -1,4 +1,4 @@
-export class Ingredient {
+export interface Ingredient {
   id: number;
   name: string;
 
@@ -10,23 +10,6 @@ export class Ingredient {
 
   count?: string;
   measure?: string;
-  isCustom?: boolean;
-
-  constructor(data?: any) {
-    this.id = data.id ? data.id : null;
-    this.name = data.name ? data.name : null;
-
-    this.category = data.category ? data.category : null;
-    this.calories = data.calories ? data.calories : null;
-    this.fat = data.fat ? data.fat : null;
-    this.proteins = data.proteins ? data.proteins : null;
-    this.carbs = data.carbs ? data.carbs : null;
-
-    this.count = data.count ? data.count : null;
-    this.measure = data.measure ? data.measure : null;
-
-
-  }
 }
 
 export const MEASURE = [

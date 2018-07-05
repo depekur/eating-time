@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {RecipeService} from "../../shared/services/recipe.service";
-import { storageUrl } from "../../app-config";
-import { ShortRecipe } from "../../shared/model/recipe.model";
+import { ShortRecipe, RecipesResponse } from "../../shared/model/recipe.model";
 import { Paginator } from "../../shared/model/pagination.model";
 
 @Component({
@@ -12,11 +11,7 @@ import { Paginator } from "../../shared/model/pagination.model";
 })
 export class RecipesListComponent implements OnInit {
   recipes: ShortRecipe[];
-  paginator: Paginator = {
-    current_page: 1
-  };
-
-  photoStorageUrl = storageUrl;
+  paginator: Paginator;
 
   isLoadingMore: boolean = false;
 
@@ -31,18 +26,10 @@ export class RecipesListComponent implements OnInit {
   }
 
   getRecipes() {
-    this.recipeService.getRecipes(this.paginator.current_page).subscribe(
-      data => {
-        this.recipes = data.data;
-
-        this.paginator.current_page = data.current_page;
-        this.paginator.last_page = data.last_page;
-        this.paginator.per_page = data.per_page;
-        this.paginator.total = data.total;
-
-
-        // console.log('recipes', this.recipes);
-        // console.log('paginator', this.paginator);
+    this.recipeService.getRecipes(1).subscribe(
+      (data: RecipesResponse) => {
+        this.recipes = data.recipes;
+        this.paginator = data.paginator;
       },
       error => {
         console.warn(error);
@@ -53,17 +40,14 @@ export class RecipesListComponent implements OnInit {
   loadMore() {
     this.isLoadingMore = true;
 
-    let pageNumber = this.paginator.current_page + 1;
+    if (!this.paginator.nextPage) { return; }
 
-    if (this.paginator.current_page === this.paginator.last_page) { return; }
-    if (pageNumber > this.paginator.last_page) { return; }
-
-    this.recipeService.getRecipes(pageNumber).subscribe(
-      data => {
+    this.recipeService.getRecipes(this.paginator.nextPage).subscribe(
+      (data: RecipesResponse) => {
         this.isLoadingMore = false;
 
-        this.paginator.current_page = data.current_page;
-        this.recipes = this.recipes.concat(data.data);
+        this.paginator = data.paginator;
+        this.recipes = this.recipes.concat(data.recipes);
       },
       error => {
         this.isLoadingMore = false;

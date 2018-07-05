@@ -1,6 +1,7 @@
 export interface Paginator {
-  current_page: number;
-  last_page?: number;
-  per_page?: number;
-  total?: number;
+  currentPage: number;
+  nextPage: number|boolean;
+  lastPage: number;
+  perPage: number;
+  total: number;
 }

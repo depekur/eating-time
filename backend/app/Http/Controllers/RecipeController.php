@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App;
-use App\Ingredient;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
@@ -31,23 +30,46 @@ class RecipeController extends Controller
     //return view('welcome', ['recipes' => $recipes]);
   }
 
-
-  public function getRecipeById($id) {
-    $recipe = App\Recipe::with(['user', 'steps', 'ingredients', 'categories', 'destinations', 'country'])
-      ->where('recipe_id', $id )
-      ->get();
-
-    //$url = Storage::url($recipe->recipe_id .'/'. $request->photo[0]['hash']);
-
-    //$recipe[0]['photo_url'] = Storage::url($id .'/');
-
-    return $recipe[0];
+  public function filters()
+  {
+    return [
+      'destinations' => RecipeController::prepareRecipeDestinations(App\Destination::all()->toArray()),
+      'categories' => RecipeController::prepareRecipeCategories(App\Category::all()->toArray()),
+      'country' => RecipeController::prepareCountries(App\Country::all()->toArray())
+    ];
   }
 
-  public function getAllRecipes() {
-    return App\Recipe::with(['categories', 'destinations'])
-      ->paginate(3);
+  public function getRecipeById($id)
+  {
+    $recipe = App\Recipe::with([
+      'user',
+      'steps',
+      'ingredients',
+      'categories',
+      'destinations',
+      'country'])
+      ->where('recipe_id', $id )->get();
+
+    return RecipeController::prepareFullRecipeData($recipe[0]);
   }
+
+  public function getAllRecipes()
+  {
+    $data = App\Recipe::with(['categories', 'destinations'])->paginate(3);
+
+    return [
+      'paginator' => [
+        'currentPage' => $data->currentPage(),
+        'nextPage' => $data->hasMorePages() ? $data->currentPage() + 1 : false,
+        'lastPage' => $data->lastPage(),
+        'perPage' => $data->perPage(),
+        'total' => $data->total()
+      ],
+      'recipes' => RecipeController::prepareShortRecipeData($data->items())
+    ];
+  }
+
+
 
   public function saveRecipe(Request $request)
   {
@@ -116,13 +138,15 @@ class RecipeController extends Controller
 
 
 
-  private function moveRecipePhoto($file_name, $recipe_id) {
+  private function moveRecipePhoto($file_name, $recipe_id)
+  {
     Storage::move('temp/'.$file_name, 'images/'.$recipe_id.'/'.$file_name);
 
     //$url = Storage::url($recipe->recipe_id .'/'. $request->photo[0]['hash']);
   }
 
-  private function saveIngredients($ingredients, $recipe) {
+  private function saveIngredients($ingredients, $recipe)
+  {
     foreach ($ingredients as $ingredient) {
       $ing = new App\RecipeIngredient();
 
@@ -135,7 +159,8 @@ class RecipeController extends Controller
     }
   }
 
-  private function saveCategories($categories, $recipe) {
+  private function saveCategories($categories, $recipe)
+  {
     $categories_ids = [];
 
     foreach ($categories as $category) {
@@ -145,7 +170,8 @@ class RecipeController extends Controller
     $recipe->categories()->attach($categories_ids);
   }
 
-  private function saveDestinations($destinations, $recipe) {
+  private function saveDestinations($destinations, $recipe)
+  {
     $destinations_ids = [];
 
     foreach ($destinations as $destination) {
@@ -155,7 +181,8 @@ class RecipeController extends Controller
     $recipe->destinations()->attach($destinations_ids);
   }
 
-  private function saveSteps($steps, $recipe) {
+  private function saveSteps($steps, $recipe)
+  {
     foreach ($steps as $step) {
       $stp = new App\RecipeStep();
 
@@ -173,19 +200,105 @@ class RecipeController extends Controller
     }
   }
 
-  public function recipeMeta()
+  private function prepareShortRecipeData($recipes)
   {
-    $output = [];
+    $recipe_storage_url = Storage::url('/');
 
-    $output['category'] = App\Category::all();
-    $output['country'] = App\Country::all();
-    $output['destination'] = App\Destination::all();
-
-    return $output;
+    return array_map(function($recipe) use ($recipe_storage_url) {
+      return [
+        'id' => $recipe['recipe_id'],
+        'title' => $recipe['title'],
+        'calories' => $recipe['calories'],
+        'cookingTime' => $recipe['cooking_time'],
+        'servingsCount' => $recipe['servings_count'],
+        'img' => $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'],
+        'destinations' => RecipeController::prepareRecipeDestinations($recipe['destinations']->toArray()),
+        'categories' => RecipeController::prepareRecipeCategories($recipe['categories']->toArray())
+      ];
+    }, $recipes);
   }
 
-  public function ingredients()
+  private function prepareFullRecipeData($recipe)
   {
-    return App\Ingredient::all(['id', 'name', 'category']);
+    $recipe_storage_url = Storage::url($recipe['recipe_id'] .'/');
+
+    $prepared_recipe = [
+      'id' => $recipe['recipe_id'],
+      'title' => $recipe['title'],
+      'body' => $recipe['body'],
+      'calories' => $recipe['calories'],
+      'cookingTime' => $recipe['cooking_time'],
+      'img' => $recipe_storage_url . $recipe['img_name'],
+      'isShortRecipe' => $recipe['is_short_recipe'],
+      'servingsCount' => $recipe['servings_count'],
+
+      'user' => [
+        'id' => $recipe['user']['user_id'],
+        'name' => $recipe['user']['name'],
+        'avatar' => $recipe['user']['img_name'] ? $recipe_storage_url . $recipe['user']['img_name'] : null,
+        'email' => $recipe['user']['email'],
+      ],
+
+      'country' => [
+        'id' => $recipe['country_id'],
+        'name' => $recipe['country']['name'],
+      ],
+    ];
+
+    $prepared_recipe['destinations'] = RecipeController::prepareRecipeDestinations($recipe['destinations']->toArray());
+    $prepared_recipe['categories'] = RecipeController::prepareRecipeCategories($recipe['categories']->toArray());
+
+    $prepared_recipe['ingredients'] = array_map(function($ingredient) {
+      return [
+        'id' => $ingredient['id'],
+        'name' => $ingredient['name'],
+        'calories' => $ingredient['calories'],
+        'carbs' => $ingredient['carbs'],
+        'fat' => $ingredient['fat'],
+        'category' => $ingredient['category'],
+        'count' => $ingredient['info']['count'],
+        'measure' => $ingredient['info']['measure'],
+      ];
+    }, $recipe['ingredients']->toArray());
+
+    $prepared_recipe['steps'] = array_map(function($step) use ($recipe_storage_url) {
+      return [
+        'id' => $step['step_number'],
+        'body' => $step['description'],
+        'img' => $step['img_name'] ? $recipe_storage_url . $step['img_name'] : null,
+      ];
+    }, $recipe['steps']->toArray());
+
+    return $prepared_recipe;
+  }
+
+  private function prepareRecipeCategories($categories)
+  {
+    return array_map(function($category) {
+      return [
+        'id' => $category['category_id'],
+        'name' => $category['category_name']
+      ];
+    }, $categories);
+  }
+
+  private function prepareCountries($countries)
+  {
+    return array_map(function($country) {
+      return [
+        'id' => $country['country_id'],
+        'name' => $country['name']
+      ];
+    }, $countries);
+  }
+
+  private function prepareRecipeDestinations($destinations)
+  {
+    return array_map(function($destination) {
+      return [
+        'id' => $destination['destination_id'],
+        'name' => $destination['name']
+      ];
+    }, $destinations);
   }
 }

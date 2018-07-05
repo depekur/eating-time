@@ -2,56 +2,59 @@
 
   <section class="recipes-list lock-preloader"
            [class.lock-element]="!recipes">
-    <div *ngFor="let recipe of recipes"
-         class="card recipe"
-         id="recipe-{{ recipe.recipe_id }}">
+    <div *ngIf="recipes">
+      <div *ngFor="let recipe of recipes"
+           class="card recipe"
+           id="recipe-{{ recipe.id }}">
 
-      <a routerLink="/recipe/{{ recipe.recipe_id }}">
+        <a routerLink="/recipe/{{ recipe.id }}">
 
-        <h2>{{ recipe.title }}</h2>
+          <h2>{{ recipe.title }}</h2>
 
-        <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
-          <!--<span class="card" *ngFor="let category of recipe.categories">-->
-            <!--{{ category.category_name }}-->
-          <!--</span>-->
-        <!--</div>-->
+          <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
+            <!--<span class="card" *ngFor="let category of recipe.categories">-->
+              <!--{{ category.category_name }}-->
+            <!--</span>-->
+          <!--</div>-->
 
-        <div *ngIf="recipe.destinations" class="recipe__destinations">
-          <span *ngFor="let destination of recipe.destinations"
-                class="" >
-            {{ destination.name }}
-          </span>
-        </div>
+          <div *ngIf="recipe.destinations" class="recipe__destinations">
+            <span *ngFor="let destination of recipe.destinations"
+                  class="" >
+              {{ destination.name }}
+            </span>
+          </div>
 
-        <figure>
-          <img *ngIf="recipe.img_name"
-               class="recipe__img"
-               src="{{ photoStorageUrl }}{{ recipe.recipe_id }}/{{ recipe.img_name }}"
-               alt="{{ recipe.title }}">
-        </figure>
+          <figure>
+            <img *ngIf="recipe.img"
+                 class="recipe__img"
+                 src="{{ recipe.img }}"
+                 alt="{{ recipe.title }}">
+          </figure>
 
-        <div class="recipe__info">
-          <span *ngIf="recipe.servings_count">Порций: {{ recipe.servings_count }}</span>
-          <span *ngIf="recipe.cooking_time">Время готовки: {{ recipe.cooking_time }}</span>
-          <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
-        </div>
+          <div class="recipe__info">
+            <span *ngIf="recipe.servingsCount">Порций: {{ recipe.servingsCount }}</span>
+            <span *ngIf="recipe.cookingTime">Время готовки: {{ recipe.cookingTime }}</span>
+            <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
+          </div>
 
-        <!--<p *ngIf="recipe.body">-->
-          <!--{{ recipe.body }}-->
-        <!--</p>-->
+          <!--<p *ngIf="recipe.body">-->
+            <!--{{ recipe.body }}-->
+          <!--</p>-->
 
-      </a>
-    </div>
+        </a>
+      </div>
 
 
-    <div *ngIf="(paginator.current_page !== paginator.last_page) && recipes"
-         class="load-more lock-preloader"
-         [class.lock-element]="isLoadingMore">
-      <button type="button"
-              class="btn"
-              (click)="loadMore()">
-        load more
-      </button>
+      <div *ngIf="paginator.nextPage && recipes"
+           class="load-more lock-preloader"
+           [class.lock-element]="isLoadingMore">
+        <button type="button"
+                class="btn"
+                (click)="loadMore()">
+          load more
+        </button>
+      </div>
+
     </div>
   </section>
 

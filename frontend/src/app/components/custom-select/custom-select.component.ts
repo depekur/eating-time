@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, forwardRef } from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
+import { CustomSelect } from "../../shared/model/custom-select.model";
 
 @Component({
   selector: 'custom-select',
@@ -24,7 +25,9 @@ export class CustomSelectComponent implements OnInit, OnDestroy, ControlValueAcc
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.data = this.data.map((item) => new CustomSelect(item));
+  }
 
   ngOnDestroy() {
     this.data = null;

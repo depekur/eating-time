@@ -1,5 +1,4 @@
 import { Action, AnyAction } from 'redux';
-import {Recipe, RecipeCategory, RecipeCountry, RecipeDestination} from './shared/model/recipe.model';
 
 export interface IAppState {
   isLoggedIn: boolean;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {RecipeService} from "../../shared/services/recipe.service";
-import {storageUrl} from "../../app-config";
+import { FullRecipe } from "../../shared/model/recipe.model";
 
 @Component({
   selector: 'app-single-recipe',
@@ -10,8 +10,7 @@ import {storageUrl} from "../../app-config";
 })
 export class SingleRecipeComponent implements OnInit {
   recipeId: number;
-  recipe;
-  photoStorageUrl = storageUrl;
+  recipe: FullRecipe;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService) {
@@ -29,11 +28,11 @@ export class SingleRecipeComponent implements OnInit {
 
   getRecipe() {
     this.recipeService.getSingleRecipe(this.recipeId).subscribe(
-      data => {
+      (data: FullRecipe) => {
         this.recipe = data;
-        //console.log(data);
       },
       error => {
+        // todo server logging
         console.warn(error);
       }
     );

@@ -7,17 +7,16 @@
     <h1>{{ recipe.title }}</h1>
 
     <figure>
-      <img *ngIf="recipe.img_name"
+      <img *ngIf="recipe.img"
            class="recipe__img"
-           src="{{ photoStorageUrl }}{{ recipe.recipe_id }}/{{ recipe.img_name }}"
+           src="{{ recipe.img }}"
            alt="{{ recipe.title }}">
     </figure>
-
 
     <div *ngIf="recipe.categories" class="recipe__categories">
       <span *ngFor="let category of recipe.categories"
             class="card">
-        {{ category.category_name }}
+        {{ category.name }}
       </span>
     </div>
 
@@ -33,26 +32,28 @@
       <ul>
         <li *ngFor="let ingredient of recipe.ingredients">
           <span>{{ ingredient.name }}</span> -
-          <span>{{ ingredient.info.count }}</span>
-          <span>{{ ingredient.info.measure }}</span>
+          <span>{{ ingredient.count }}</span>
+          <span>{{ ingredient.measure }}</span>
         </li>
       </ul>
     </section>
+
+    <p>{{ recipe.body }}</p>
 
 
     <section *ngIf="recipe.steps.length"
              class="recipe__steps">
       <ul>
         <li *ngFor="let step of recipe.steps">
-          <h3>Шаг {{ step.recipe_step_id }}</h3>
-          <figure *ngIf="step.img_name">
+          <h3>Шаг {{ step.id }}</h3>
+          <figure *ngIf="step.img">
             <img
               class="recipe__img"
-              src="{{ photoStorageUrl }}{{ recipe.recipe_id }}/{{ step.img_name }}"
+              src="{{ step.img }}"
               alt="{{ recipe.title }}">
           </figure>
 
-          <p>{{ step.description }}</p>
+          <p>{{ step.body }}</p>
 
 
         </li>

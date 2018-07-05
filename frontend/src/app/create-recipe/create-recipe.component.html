@@ -107,25 +107,25 @@
 
 
                 <!------------------------->
-                <!-- Chosen categoriesData -->
+                <!-- Chosen categories -->
                 <!------------------------->
                 <p class="add-recipe__selected-info form-group">
                     <span class="card"
-                          (click)="toggleSelected(destination.id, metaTypes.DESTINATIONS)"
+                          (click)="toggleSelected(destination.id, 'destinations')"
                           *ngFor="let destination of createRecipeForm.value.destinations">
                       {{ destination.name }}
                       <i class="fas fa-times"></i>
                     </span>
 
                   <span class="card"
-                        (click)="toggleSelected(cat.id, metaTypes.CATEGORIES)"
-                        *ngFor="let cat of createRecipeForm.value.categories">
+                        *ngFor="let cat of createRecipeForm.value.categories"
+                        (click)="toggleSelected(cat.id, 'categories')">
                       {{ cat.name }}
                       <i class="fas fa-times"></i>
                     </span>
 
                   <span class="card"
-                        (click)="toggleSelected(country.id, metaTypes.COUNTRIES)"
+                        (click)="toggleSelected(country.id, 'countries')"
                         *ngFor="let country of createRecipeForm.value.countries">
                       {{ country.name }}
                       <i class="fas fa-times"></i>
@@ -134,33 +134,33 @@
 
 
                 <!------------------------->
-                <!-- selected categoriesData -->
+                <!-- selected categories -->
                 <!------------------------->
-                <div class="add-recipe__selected-fields">
+                <div *ngIf="filters" class="add-recipe__selected-fields">
 
 
                   <div class="form-group">
-                    <custom-select *ngIf="destinationsData"
+                    <custom-select *ngIf="filters.destinations"
                                    formControlName="destinations"
                                    [title]="'Назначение рецепта'"
-                                   [data]="destinationsData">
+                                   [data]="filters.destinations">
                     </custom-select>
                   </div>
 
                   <div class="form-group">
-                    <custom-select *ngIf="categoriesData"
+                    <custom-select *ngIf="filters.categories"
                                    formControlName="categories"
                                    [title]="'Категория рецепта'"
-                                   [data]="categoriesData">
+                                   [data]="filters.categories">
                     </custom-select>
                   </div>
 
                   <div class="form-group">
-                    <custom-select *ngIf="countriesData"
+                    <custom-select *ngIf="filters.country"
                                    [title]="'Кухня'"
                                    formControlName="countries"
                                    [multiple]="false"
-                                   [data]="countriesData">
+                                   [data]="filters.country">
                     </custom-select>
                   </div>
                 </div>

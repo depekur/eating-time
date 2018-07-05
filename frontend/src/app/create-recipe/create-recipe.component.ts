@@ -6,7 +6,6 @@ import {Observable, Subscription} from "rxjs/Rx";
 import {NgRedux, select} from "@angular-redux/store";
 import {APP_EVENTS, IAppState} from "../store";
 import {RecipeService} from '../shared/services/recipe.service';
-import { Recipe, RECIPE_META_TYPES } from '../shared/model/recipe.model';
 import {CustomCategory, CustomDestination, CustomCountry} from "../shared/model/custom-select.model";
 import { Ingredient, MEASURE } from "../shared/model/ingredient.model";
 import {IngredientService} from "../shared/services/ingredient.service";
@@ -20,15 +19,14 @@ import {Router} from "@angular/router";
 })
 export class CreateRecipeComponent implements OnInit, OnDestroy {
   createRecipeForm;
-  @select('createRecipeForm') readonly createRecipeState: Observable<Recipe>;
-
-  metaTypes = RECIPE_META_TYPES;
+ //@select('createRecipeForm') readonly createRecipeState: Observable<Recipe>;
 
   categoriesData = null;
   countriesData = null;
   destinationsData = null;
 
-  metaSubscription: Subscription;
+  filters$: Subscription;
+  filters;
   isSending: boolean = false;
   isSubmitted: boolean = false;
 
@@ -57,12 +55,10 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
   }
 
   getInitData() {
-    this.metaSubscription = this.recipeService
-      .getRecipeMetaData()
+    this.filters$ = this.recipeService
+      .filters$
       .subscribe(data => {
-        this.categoriesData = data.category.map((item) => new CustomCategory(item));
-        this.countriesData = data.country.map((item) => new CustomCountry(item));
-        this.destinationsData = data.destination.map((item) => new CustomDestination(item));
+        this.filters = data;
       });
   }
 
