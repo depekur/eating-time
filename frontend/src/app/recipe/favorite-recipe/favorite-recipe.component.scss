@@ -1,0 +1,24 @@
+@import '../../../assets/style/var';
+
+.favorites {
+  width: 25px;
+  height: 25px;
+
+  cursor: pointer;
+
+  &.true {
+    svg {
+      path {
+        fill: $banana-color-2;
+      }
+    }
+  }
+
+  svg {
+    width: 100%;
+
+    path {
+      fill: $banana-color-4;
+    }
+  }
+}

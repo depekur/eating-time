@@ -1,21 +1,14 @@
-
-:host(.chat-files--error) {
-	.details-dropzone {
-		border-color: #d9534f;
-	}
-}
-
 // dropzone
 
 .details-dropzone {
-	height: 60px;
+	height: auto;
 
 	padding: 10px;
-  border: 2px dashed #e0e0e0;
+  border: 2px dashed lighten(#000000, 60%);
 	text-align: center;
 
 	@media screen and (max-width: 479px) {
-		height: 50px;
+		//height: 50px;
 	}
 
 	label {
@@ -34,6 +27,19 @@
 		// @media screen and (max-width: 479px) {
 			// flex-direction: column;
 		// }
+
+    &.svg-icon {
+      justify-content: space-around;
+    }
+
+    svg {
+      width: 100px;
+
+      path {
+        fill: lighten(#000000, 60%);
+      }
+
+    }
 
 		.label-text {
 			margin-right: 10px;
@@ -119,15 +125,15 @@
 	font-size: 13px;
 	line-height: 1;
 
-	@media screen and (min-width: 768px) {
-		float: left;
-		margin: 15px 10px 0 0;
-	}
-
-	@media screen and (max-width: 767px) {
-		width: 100%;
-		margin: 15px 0 0 0;
-	}
+	//@media screen and (min-width: 768px) {
+	//	float: left;
+	//	margin: 15px 10px 0 0;
+	//}
+	//
+	//@media screen and (max-width: 767px) {
+	//	width: 100%;
+	//	margin: 15px 0 0 0;
+	//}
 
 	.icon {
 		font-size: 12px;

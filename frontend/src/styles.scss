@@ -1,6 +1,6 @@
 @import "./assets/style/reset";
 @import "./assets/fonts/web-icons/web-icons.css";
-@import "./assets/style/variables";
+@import "./assets/style/var";
 @import "./assets/style/mixins";
 @import "./assets/style/helper";
 
@@ -8,6 +8,7 @@
 @import "./assets/style/components/links";
 @import "./assets/style/components/inputs";
 @import "./assets/style/components/card";
+@import "./assets/style/components/form";
 
 @import "./assets/style/layout";
 @import "./assets/style/header";

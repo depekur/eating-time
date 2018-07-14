@@ -38,6 +38,7 @@ export class AuthService {
 
   logout(): void {
     this.jwtService.deleteToken();
+    this.ngRedux.dispatch({ type: APP_EVENTS.LOGOUT });
 
     this.router.navigate(['/auth/login']);
   }

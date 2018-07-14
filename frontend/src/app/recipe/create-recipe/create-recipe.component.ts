@@ -1,15 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators, FormBuilder, FormArray} from "@angular/forms";
-import {counts, patterns} from "../shared/form-patterns";
+import {counts, patterns} from "../../shared/form-patterns";
 
 import {Observable, Subscription} from "rxjs/Rx";
-import {NgRedux, select} from "@angular-redux/store";
-import {APP_EVENTS, IAppState} from "../store";
-import {RecipeService} from '../shared/services/recipe.service';
-import {CustomCategory, CustomDestination, CustomCountry} from "../shared/model/custom-select.model";
-import { Ingredient, MEASURE } from "../shared/model/ingredient.model";
-import {IngredientService} from "../shared/services/ingredient.service";
-import {validationMessages} from "../shared/form-errors";
+import {RecipeService} from '../../shared/services/recipe.service';
+import {validationMessages} from "../../shared/form-errors";
 import {Router} from "@angular/router";
 
 @Component({
@@ -19,8 +14,6 @@ import {Router} from "@angular/router";
 })
 export class CreateRecipeComponent implements OnInit, OnDestroy {
   createRecipeForm;
- //@select('createRecipeForm') readonly createRecipeState: Observable<Recipe>;
-
   categoriesData = null;
   countriesData = null;
   destinationsData = null;
@@ -30,28 +23,22 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
   isSending: boolean = false;
   isSubmitted: boolean = false;
 
-  measures = MEASURE;
   errors = validationMessages;
 
-  /**
-   *  search ingredient
-   */
-  searchIngredients: any[] = [];
-  searchIngredientTimeout;
-  secondsBeforeSearch: number = 1000;
-  isSearchBgVisible: boolean = false;
 
   isFileProcessing: boolean;
 
-  constructor(private ngRedux: NgRedux<IAppState>,
-              private recipeService: RecipeService,
+  constructor(private recipeService: RecipeService,
               private formBuilder: FormBuilder,
-              private ingredientService: IngredientService,
               private router: Router) { }
 
   ngOnInit() {
     this.getInitData();
     this.initForm();
+  }
+
+  ngOnDestroy() {
+    this.filters$.unsubscribe();
   }
 
   getInitData() {
@@ -73,21 +60,13 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
       destinations: new FormControl('', []),
       categories: new FormControl('', []),
       countries: new FormControl('', []),
-      ingredients: this.formBuilder.array([]),
-      steps: this.formBuilder.array([ ])
+      ingredients: new FormControl('', []),
+      steps: this.formBuilder.array([ this.createStep(1), this.createStep(2)])
     });
   }
 
-  createIngredient() {
-    return new FormGroup({
-      id: new FormControl('', []),
-      name: new FormControl('', []),
-      count: new FormControl('', []),
-      measure: new FormControl('', []),
-    });
-  }
 
-  createStep(stepId: number) {
+  createStep(stepId: number): FormGroup {
     return new FormGroup({
       id: new FormControl(stepId, []),
       step_text: new FormControl('', []),
@@ -95,7 +74,7 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleSelected(id, type) {
+  toggleSelected(id, type): void {
     if (this.createRecipeForm.value[type]) {
       const selected = this.createRecipeForm.value[type].filter(item => {
         return item.id !== id;
@@ -105,18 +84,22 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     }
   }
 
-  addNewIngredientFields() {
-    this.createRecipeForm.get('ingredients').push(this.createIngredient());
+  addQuantityToIng(id: number, quantity): void {
+    let ingredients = this.createRecipeForm.controls.ingredients.value;
+
+    ingredients.forEach(ing => {
+      if (ing.id === id) {
+        ing.quantity = quantity;
+      }
+    });
+
+    this.createRecipeForm.controls.ingredients.setValue(ingredients);
   }
 
   addNewStepFields() {
     let stepId = this.createRecipeForm.get('steps').length + 1;
 
     this.createRecipeForm.get('steps').push(this.createStep(stepId));
-  }
-
-  removeIngredient(index) {
-    this.createRecipeForm.get('ingredients').removeAt(index);
   }
 
   removeStep(index) {
@@ -127,47 +110,6 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     this.createRecipeForm.get('steps').controls.forEach((step, i) => {
       step.controls.id.setValue(i+1);
     });
-  }
-
-  searchIngredient(value, index) {
-    this.searchIngredients[index] = null;
-    this.isSearchBgVisible = false;
-
-    if (value == '' && value.length < 3) { return; }
-
-    clearTimeout(this.searchIngredientTimeout);
-
-    this.searchIngredientTimeout = setTimeout(() => {
-      this.ingredientService.searchIngredient(value).subscribe(
-        ing => {
-          this.searchIngredients[index] = ing.length ? ing : null;
-
-          if (this.searchIngredients[index]) {
-            this.isSearchBgVisible = true;
-          }
-
-          //console.log(this.searchIngredients);
-        },
-        error => {
-          console.warn(error);
-        }
-      );
-    }, this.secondsBeforeSearch);
-  }
-
-  selectIngFromSearch(ingredient, index) {
-    this.createRecipeForm.get('ingredients').controls[index].controls.name.setValue(ingredient.name);
-    this.createRecipeForm.get('ingredients').controls[index].controls.id.setValue(ingredient.id);
-    this.closeSearch();
-  }
-
-  closeSearch() {
-    this.searchIngredients = [];
-    this.isSearchBgVisible = false;
-  }
-
-  updateIngredientState() {
-
   }
 
   onSubmit() {
@@ -195,10 +137,6 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
           console.warn(error);
         }
       );
-  }
-
-  ngOnDestroy() {
-
   }
 
   redirectToRecipe(id) {

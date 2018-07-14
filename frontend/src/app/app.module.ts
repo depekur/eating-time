@@ -17,6 +17,8 @@ import { IAppState, INITIAL_STATE, rootReducer } from "./store";
 import { CommentsComponent } from './components/comments/comments.component';
 import { IngredientsSelectComponent } from './components/ingredients-select/ingredients-select.component';
 import {JwtInterceptor} from "./jwt.interceptor";
+import { FooterComponent } from './components/footer/footer.component';
+import { NavComponent } from './components/nav/nav.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import {JwtInterceptor} from "./jwt.interceptor";
     LayoutComponent,
     HeaderComponent,
     CommentsComponent,
-    IngredientsSelectComponent
+    IngredientsSelectComponent,
+    FooterComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Recipe extends Model
 {
@@ -32,7 +33,7 @@ class Recipe extends Model
     {
         return $this->belongsToMany('App\Ingredient', 'recipe_ingredients', 'recipe_id', 'ingredients_id')
           ->as('info')
-          ->withPivot('count', 'measure');
+          ->withPivot('quantity');
     }
 
     public function destinations()
@@ -43,5 +44,17 @@ class Recipe extends Model
     public function categories()
     {
         return $this->belongsToMany('App\Category', 'recipe_categories', 'recipe_id', 'category_id');
+    }
+
+    public function favorites()
+    {
+      $token = JWTAuth::getToken();
+
+      if ($token) {
+        return $this->belongsToMany('App\User', 'favorite_recipes', 'recipe_id', 'user_id')
+          ->where('favorite_recipes.user_id', JWTAuth::parseToken()->toUser()->user_id);
+      } else {
+        return $this->belongsToMany('App\User', 'favorite_recipes', 'recipe_id', 'user_id');
+      }
     }
 }

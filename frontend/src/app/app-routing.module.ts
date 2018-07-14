@@ -25,8 +25,9 @@ import {IsLoggedInGuard} from "./shared/guards/is-logged-in.guard";
 @NgModule({
   imports: [RouterModule.forRoot([
     {path: 'auth', loadChildren: './auth/auth.module#AuthModule'},
+    {path: 'ration', loadChildren: './ration/ration.module#RationModule'},
     {path: 'recipe', loadChildren: './recipe/recipe.module#RecipeModule'},
-    {path: 'add-recipe', loadChildren: './create-recipe/create-recipe.module#CreateRecipeModule'}
+    {path: 'add-recipe', loadChildren: './recipe/create-recipe/create-recipe.module#CreateRecipeModule'}
     ])],
   exports: [RouterModule]
 })

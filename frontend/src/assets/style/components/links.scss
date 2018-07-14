@@ -1,3 +1,5 @@
+@import '../var';
+
 a {
   color: inherit;
   text-decoration: none;
@@ -7,4 +9,21 @@ a {
   text-decoration: underline;
   color: #5bc0de;
   cursor: pointer;
+}
+
+.link--dark {
+  @extend .link;
+
+  color: $banana-color-13;
+}
+
+.link--small {
+  @extend .link;
+
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.link--active {
+  color: #005cbf;
 }

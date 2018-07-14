@@ -3,8 +3,8 @@
   border: none;
 
   border-radius: 4px;
-  background-color: #fafafa;
-  color: #277dae;
+  background-color: $banana-color-1;
+  color: $banana-color-12;
   cursor: pointer;
   outline: none;
 
@@ -25,8 +25,8 @@
   user-select: none;
 
   &:hover {
-    color: #2b6aa4;
-    background-color: #f5f5f5;
+    color: darken($banana-color-12, 20%);
+    background-color: $banana-color-9;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.28);
   }
 
@@ -45,10 +45,10 @@
 
   &:disabled {
     cursor: auto;
-    background-color: #ccc !important;
+    background-color: $banana-color-4 !important;
 
     &:hover {
-      background-color: #ccc;
+      background-color: $banana-color-4;
 
       -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,.3);
       -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,.3);
@@ -58,23 +58,37 @@
   }
 
   &.active {
-    background-color: #2ab27b;
-    color: #fafafa;
+    background-color: $banana-color-5;
+    color: $banana-color-14;
 
     &:hover {
-      background-color: #2ab21c;
+      background-color: darken($banana-color-5, 10%);
     }
   }
 }
 
-.btn--red {
+.btn--delete {
   @extend .btn;
+  padding: 6px 8px;
 
-  color: #f5f5f5;
-  background-color: #ac2925;
+  color: $banana-color-15;
+  background-color: $banana-color-3;
 
   &:hover {
-    color: #f5f5f5;
-    background-color: #491217;
+    color: $banana-color-15;
+    background-color: darken($banana-color-3, 10%);
+  }
+}
+
+
+.btn--current {
+  @extend .btn;
+
+  color: $banana-color-15;
+  background-color: $banana-color-3;
+
+  &:hover {
+    color: $banana-color-15;
+    background-color: darken($banana-color-3, 10%);
   }
 }

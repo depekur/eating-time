@@ -27,8 +27,8 @@ class AddIngredientsMeasureFields extends Migration
     public function down()
     {
 		 Schema::table('recipe_ingredients', function($table) {
-			 $table->string('count');
-			 $table->string('measure');
+			 $table->dropColumn('count');
+			 $table->dropColumn('measure');
 		 });
     }
 }

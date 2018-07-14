@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable, of, Subject } from 'rxjs/index';
 import {apiUrls} from "../../app-config";
 import {ReplaySubject} from "rxjs/Rx";
@@ -20,9 +20,36 @@ export class RecipeService {
     return this.filters.asObservable();
   }
 
-  // todo sorting filters
   getRecipes(page, query?): Observable<any> {
-    return this.http.post(`${apiUrls.recipe.all}${page}`, 'test');
+    let options = { params: new HttpParams().set('page', page) };
+
+    if (query) {
+      options.params = this.prepareQuery(query, options);
+    }
+
+    return this.http.get(apiUrls.recipe.all, options);
+  }
+
+  private prepareQuery(query, options): HttpParams {
+    Object.keys(query).forEach((paramName) => {
+      if (paramName === 'query') {
+        options.params = options.params.append(paramName, query[paramName]);
+      } else if (query[paramName]) {
+        let params = '';
+
+        query[paramName].forEach((param, index) => {
+          params += `${param.id}`;
+
+          if (query[paramName].length !== index+1) {
+            params += `,`;
+          }
+        });
+
+        options.params = options.params.append(paramName, params);
+      }
+    });
+
+    return options.params;
   }
 
   getSingleRecipe(id: number): Observable<any> {

@@ -1,3 +1,43 @@
-<p>
-  recipe-card works!
-</p>
+<div class="card recipe"
+     id="recipe-{{ recipe.id }}">
+
+  <favorite-recipe *ngIf="isLoggedIn | async"
+                   [recipeId]="recipe.id"
+                   [favorite]="recipe.favorites"></favorite-recipe>
+
+  <a routerLink="/recipe/{{ recipe.id }}">
+
+    <h2>{{ recipe.title }}</h2>
+
+    <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
+    <!--<span class="card" *ngFor="let category of recipe.categories">-->
+    <!--{{ category.category_name }}-->
+    <!--</span>-->
+    <!--</div>-->
+
+    <div *ngIf="recipe.destinations" class="recipe__destinations">
+            <span *ngFor="let destination of recipe.destinations"
+                  class="" >
+              {{ destination.name }}
+            </span>
+    </div>
+
+    <figure>
+      <img *ngIf="recipe.img"
+           class="recipe__img"
+           src="{{ recipe.img }}"
+           alt="{{ recipe.title }}">
+    </figure>
+
+    <div class="recipe__info">
+      <span *ngIf="recipe.servingsCount">Порций: {{ recipe.servingsCount }}</span>
+      <span *ngIf="recipe.cookingTime">Время готовки: {{ recipe.cookingTime }}</span>
+      <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
+    </div>
+
+    <!--<p *ngIf="recipe.body">-->
+    <!--{{ recipe.body }}-->
+    <!--</p>-->
+
+  </a>
+</div>

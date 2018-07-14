@@ -4,31 +4,6 @@
       <a routerLink="/">Banana Garden</a>
     </div>
 
-    <nav class="top-nav">
-      <ul class="">
-        <li class="top-nav__recipes">
-          <a class="link" routerLink="/recipe/all" routerLinkActive="active">рецепты</a>
-        </li>
-        <li *ngIf="isLoggedIn | async" class="top-nav__recipes">
-          <a class="link"routerLink="/add-recipe" routerLinkActive="active">добавить</a>
-        </li>
-
-        <li *ngIf="isLoggedIn | async" >
-          <a class="link" (click)="logout()" >выход</a>
-        </li>
-
-        <li *ngIf="!(isLoggedIn | async)" >
-          <a class="link" routerLink="/auth/login" routerLinkActive="active">вход</a>
-        </li>
-        <li *ngIf="!(isLoggedIn | async)" >
-          <a class="link" routerLink="/auth/register" routerLinkActive="active">регистрация</a>
-        </li>
-
-
-        <!--<li *ngIf="userName | async" class="link">-->
-          <!--{{ userName | async }}-->
-        <!--</li>-->
-      </ul>
-    </nav>
+    <app-nav></app-nav>
   </div>
 </header>

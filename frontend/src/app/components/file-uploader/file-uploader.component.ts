@@ -29,6 +29,8 @@ export class FileUploaderComponent implements OnInit, ControlValueAccessor {
   @Input() isMultiple?: boolean = false;
   @Output() isFileProcessing: EventEmitter<boolean> = new EventEmitter();
 
+  @Input() showPic: boolean = false;
+
   @Input() id: string;
   fileInputEl: any;
 

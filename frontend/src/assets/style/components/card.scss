@@ -17,3 +17,22 @@
   font-family: Roboto,"Helvetica Neue",sans-serif;
 
 }
+
+.card--mini {
+  @extend .card;
+
+  margin-right: 9px;
+  margin-top: 9px;
+  padding: 5px;
+
+  font-size: 13px;
+  background: #f5f5f5;
+
+  cursor: pointer;
+
+  i.fas {
+    margin-left: 5px;
+  }
+}
+
+

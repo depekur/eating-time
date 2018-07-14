@@ -1,0 +1,24 @@
+$banana-color-1: #F7DD6E;
+$banana-color-2: #EFC232;
+$banana-color-3: #CC3333;
+$banana-color-4: #ECE9E5;
+$banana-color-5: #FF9900;
+$banana-color-6: #003366;
+$banana-color-7: #CCCCCC;
+$banana-color-8: #7DA032;
+
+$banana-color-9: darken($banana-color-1, 15%);
+$banana-color-10: lighten($banana-color-1, 25%);
+$banana-color-11: darken($banana-color-1, 60%);
+
+
+$banana-color-12: lighten(#000, 30%);
+$banana-color-13: lighten(#000, 23%);
+$banana-color-14: #fafafa;
+$banana-color-15: #f5f5f5;
+$banana-color-16: #277dae;
+
+
+
+$background-color: #fff;
+$brand-color: $banana-color-3;

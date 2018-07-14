@@ -37,7 +37,9 @@ Route::get('/filters', 'RecipeController@filters');
 Route::get('/ingredients/{value}', 'IngredientController@search');
 
 Route::get('/recipe/{id}', 'RecipeController@getRecipeById');
-Route::post('/recipes', 'RecipeController@getAllRecipes');
+Route::get('/recipes', 'RecipeController@getRecipes');
+
+
 
 
 /**
@@ -55,6 +57,8 @@ Route::group(['middleware' => 'jwt.auth'], function() {
    *  recipe api
    */
   Route::post('add-recipe', 'RecipeController@saveRecipe');
+  Route::post('/favorite', 'RecipeController@addToFavorite');
+  Route::delete('/favorite/{id}', 'RecipeController@deleteFromFavorite');
 
   /**
    *  user api

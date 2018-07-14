@@ -14,7 +14,7 @@ class AddCategoryToIngredients extends Migration
     public function up()
     {
 		 Schema::table('ingredients', function($table) {
-			 $table->string('category');
+       $table->integer('category')->unsigned();
 		 });
     }
 

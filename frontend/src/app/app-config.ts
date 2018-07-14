@@ -19,8 +19,9 @@ export const apiUrls = {
 
   recipe: {
     add: `${config.apiUrl}add-recipe`,
-    all: `${config.apiUrl}recipes?page=`,
-    single: `${config.apiUrl}recipe/`
+    all: `${config.apiUrl}recipes`,
+    single: `${config.apiUrl}recipe/`,
+    favorite: `${config.apiUrl}favorite`
   }
 };
 

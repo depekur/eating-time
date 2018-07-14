@@ -5,6 +5,8 @@ import { Tabs, Tab } from "../components/tabs/tabs.component";
 
 import { CustomSelectComponent } from "../components/custom-select/custom-select.component";
 import {FormErrorsComponent} from "../components/form-errors/form-errors.component";
+import { SearchHighligthPipe } from './pipe/search-highligth.pipe';
+import { SearchPipe } from './pipe/search.pipe';
 
 @NgModule({
   imports: [
@@ -20,14 +22,20 @@ import {FormErrorsComponent} from "../components/form-errors/form-errors.compone
     Tabs,
     Tab,
 
-    FormErrorsComponent
+    FormErrorsComponent,
+
+    SearchHighligthPipe,
+    SearchPipe
   ],
   declarations: [
     CustomSelectComponent,
     Tabs,
     Tab,
 
-    FormErrorsComponent
+    FormErrorsComponent,
+
+    SearchHighligthPipe,
+    SearchPipe
   ]
 })
 export class SharedModule { }

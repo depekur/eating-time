@@ -1,5 +1,9 @@
-<div class="">
-  <p  *ngIf="title" class="subtitle">{{ title }}</p>
+<div class="custom-select__wrapper">
+  <p *ngIf="title"
+     class="subtitle"
+     [class.bordered]="!isCategories && !isSearch">
+    {{ title }}
+  </p>
 
   <div *ngIf="data && showSelected" class="selected-items">
     <ul>
@@ -10,14 +14,41 @@
     </ul>
   </div>
 
+  <div *ngIf="data && isCategories" class="categories">
+    <span (click)="activeCategoryId = 0; setDataByCategory();"
+          class="link--small"
+          [class.link--active]="activeCategoryId === 0">
+      Все подряд <i *ngIf="isCategoryCount">({{ initialData.length }})</i>
+    </span>
+
+    <span *ngFor="let category of categories"
+          (click)="activeCategoryId = category.id; setDataByCategory();"
+          class="link--small"
+          [class.link--active]="activeCategoryId === category.id">
+      {{ category.name }}
+      <i *ngIf="isCategoryCount">({{ category.childCount }})</i>
+    </span>
+  </div>
+
+
+  <input *ngIf="isSearch"
+         [(ngModel)]="query"
+         type="text"
+         class="inputs custom-select__search"
+         placeholder="{{ searchPlaceholder ? searchPlaceholder : defaultSearchPlaceholder }}">
+
   <div class="custom-select"
+       [style.max-height.px]="height"
        [class.full-height]="open">
+
     <ul [class.disable]="isDisabled()">
-      <li *ngFor="let item of data"
+      <li *ngFor="let item of data | search: query"
           (click)="toggleSelected(item)"
           [class.selected]="item.selected">
 
-        <span>{{ item.name }}</span>
+        <span *ngIf="isSearch"  [innerHTML]="item.name | searchHighligth:query" ></span>
+        <span *ngIf="!isSearch" >{{ item.name }}</span>
+
         <input type="checkbox"
                [checked]="item.selected"
                [disabled]="isDisabled() && !item.selected">
@@ -25,5 +56,3 @@
     </ul>
   </div>
 </div>
-
-

@@ -17,6 +17,13 @@ h2 {
 
   font-size: 18px;
   text-align: left;
+
+  &.bordered {
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+
+    border-bottom: 1px solid rgba(0,0,0,.12);
+  }
 }
 
 .half-width {
@@ -57,4 +64,10 @@ hr {
 
 .alert {
  color: #c7254e;
+}
+
+
+.search-highlight{
+  background-color: #F2E366;
+  text-decoration: underline;
 }

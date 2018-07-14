@@ -26,7 +26,7 @@ class AddServingsCountToRecipe extends Migration
 	public function down()
 	{
 		Schema::table('recipes', function ($table) {
-			$table->integer('servings_count');
+			$table->dropColumn('servings_count');
 		});
 	}
 }

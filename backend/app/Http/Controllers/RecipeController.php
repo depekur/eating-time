@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,7 +37,11 @@ class RecipeController extends Controller
     return [
       'destinations' => RecipeController::prepareRecipeDestinations(App\Destination::all()->toArray()),
       'categories' => RecipeController::prepareRecipeCategories(App\Category::all()->toArray()),
-      'country' => RecipeController::prepareCountries(App\Country::all()->toArray())
+      'country' => RecipeController::prepareCountries(App\Country::all()->toArray()),
+      'ingredientsCategories' => App\IngredientsCategory::select('id', 'category as name')->get(),
+      'ingredients' => App\Ingredient::where('synonym_of_id', '=', 0)
+                          ->select('id', 'name', 'category', 'parent_id as parent')
+                          ->get()
     ];
   }
 
@@ -53,9 +59,55 @@ class RecipeController extends Controller
     return RecipeController::prepareFullRecipeData($recipe[0]);
   }
 
-  public function getAllRecipes()
+  public function getRecipes(Request $request)
   {
-    $data = App\Recipe::with(['categories', 'destinations'])->paginate(3);
+    //$token = $request->bearerToken();
+
+    //dd(JWTAuth::parseToken()->toUser()->user_id);
+
+    $destinations = Input::get('destinations');
+    $categories = Input::get('categories');
+    $countries = Input::get('countries');
+    $ingredients = Input::get('ingredients');
+    $search_query = Input::get('query');
+
+    $recipe_query = App\Recipe::with(['categories', 'destinations']);
+
+//    if ($token) {
+//      $recipe_query->with('favorites');
+//    }
+
+    if ($search_query) {
+      $recipe_query->where('title', 'LIKE', '%'.$search_query.'%');
+    }
+
+    if ($destinations) {
+      $recipe_query->whereHas('destinations', function ($query) use ($destinations) {
+        $query->whereIn('recipe_destinations.destination_id', explode(',', $destinations));
+      });
+    }
+
+    if ($categories) {
+      $recipe_query->whereHas('categories', function ($query) use ($categories) {
+        $query->whereIn('recipe_categories.category_id', explode(',', $categories));
+      });
+    }
+
+    if ($countries) {
+      $recipe_query->whereIn('country_id', explode(',', $countries));
+    }
+
+    if ($ingredients) {
+      $recipe_query->whereHas('ingredients', function ($query) use ($ingredients) {
+        $query->whereIn('recipe_ingredients.ingredients_id', explode(',', $ingredients));
+      });
+    }
+
+    //$data = App\Recipe::with(['categories', 'destinations'])->paginate(3);
+
+
+    $count = $recipe_query->count();
+    $data = $recipe_query->paginate(6);
 
     return [
       'paginator' => [
@@ -65,11 +117,31 @@ class RecipeController extends Controller
         'perPage' => $data->perPage(),
         'total' => $data->total()
       ],
+      'count' => $count,
       'recipes' => RecipeController::prepareShortRecipeData($data->items())
     ];
   }
 
+  public function addToFavorite(Request $request) {
+    $token = $request->bearerToken();
+    $user_id = JWTAuth::toUser($token)->user_id;
 
+    $recipe_id = $request->recipeId;
+
+    $fav = new App\FavoriteRecipe();
+    $fav->recipe_id = $recipe_id;
+    $fav->user_id = $user_id;
+    $fav->save();
+
+    return $fav;
+  }
+
+  public function deleteFromFavorite(Request $request, $id) {
+    $token = $request->bearerToken();
+    $user_id = JWTAuth::toUser($token)->user_id;
+
+    return App\FavoriteRecipe::where('recipe_id', $id)->where('user_id', $user_id)->delete();
+  }
 
   public function saveRecipe(Request $request)
   {
@@ -151,8 +223,7 @@ class RecipeController extends Controller
       $ing = new App\RecipeIngredient();
 
       $ing->ingredients_id = $ingredient['id'];
-      $ing->count = $ingredient['count'];
-      $ing->measure = 'fuck';
+      $ing->quantity = $ingredient['quantity'];
       $ing->recipe_id = $recipe->recipe_id;
 
       $ing->save();
@@ -211,6 +282,8 @@ class RecipeController extends Controller
         'calories' => $recipe['calories'],
         'cookingTime' => $recipe['cooking_time'],
         'servingsCount' => $recipe['servings_count'],
+        'favorites' => count($recipe['favorites']) ? true : false,
+
         'img' => $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'],
         'destinations' => RecipeController::prepareRecipeDestinations($recipe['destinations']->toArray()),
         'categories' => RecipeController::prepareRecipeCategories($recipe['categories']->toArray())
@@ -256,8 +329,7 @@ class RecipeController extends Controller
         'carbs' => $ingredient['carbs'],
         'fat' => $ingredient['fat'],
         'category' => $ingredient['category'],
-        'count' => $ingredient['info']['count'],
-        'measure' => $ingredient['info']['measure'],
+        'quantity' => $ingredient['info']['quantity']
       ];
     }, $recipe['ingredients']->toArray());
 
@@ -277,7 +349,8 @@ class RecipeController extends Controller
     return array_map(function($category) {
       return [
         'id' => $category['category_id'],
-        'name' => $category['category_name']
+        'name' => $category['category_name'],
+        'category' => $category['parent_id'] ? $category['parent_id'] : false
       ];
     }, $categories);
   }

@@ -12,6 +12,7 @@ export interface ShortRecipe {
   img: string;
   title: string;
   calories: number;
+  favorites: boolean;
   cookingTime: number;
   servingsCount: number;
   categories: RecipeCategory[];
@@ -26,6 +27,7 @@ export interface FullRecipe {
   calories: number;
   cookingTime: number;
   img: string;
+  favorites: boolean;
   recipeLink?: string;
   isShortRecipe: boolean;
   comments; // todo implement comments ??? and move to another request ???

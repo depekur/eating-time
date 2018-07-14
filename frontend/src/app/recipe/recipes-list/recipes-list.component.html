@@ -1,61 +1,143 @@
 <div class="container">
 
-  <section class="recipes-list lock-preloader"
+  <section class="recipes lock-preloader"
            [class.lock-element]="!recipes">
-    <div *ngIf="recipes">
-      <div *ngFor="let recipe of recipes"
-           class="card recipe"
-           id="recipe-{{ recipe.id }}">
 
-        <a routerLink="/recipe/{{ recipe.id }}">
+    <button type="button"
+            (click)="showFilters = !showFilters"
+            class="btn recipes__filters-toggle">
+      {{ !showFilters ? 'Показать фильтры' : 'Скрыть фильтры' }}
+    </button>
 
-          <h2>{{ recipe.title }}</h2>
+    <aside *ngIf="filters"
+           class="recipes__filters card lock-preloader"
+           [class.filters--mobile]="showFilters"
+           [class.lock-element]="isLoading">
 
-          <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
-            <!--<span class="card" *ngFor="let category of recipe.categories">-->
-              <!--{{ category.category_name }}-->
-            <!--</span>-->
-          <!--</div>-->
+      <form [formGroup]="filtersForm">
 
-          <div *ngIf="recipe.destinations" class="recipe__destinations">
-            <span *ngFor="let destination of recipe.destinations"
-                  class="" >
-              {{ destination.name }}
-            </span>
-          </div>
+        <input type="text"
+               formControlName="query"
+               (input)="proceedFilters()"
+               class="inputs card recipes__search-query"
+               placeholder="Поиск по названию">
 
-          <figure>
-            <img *ngIf="recipe.img"
-                 class="recipe__img"
-                 src="{{ recipe.img }}"
-                 alt="{{ recipe.title }}">
-          </figure>
+        <div class="form-group" >
+          <custom-select *ngIf="filters.ingredients"
+                         formControlName="ingredients"
+                         (change)="proceedFilters()"
+                         [title]="'Ингридиенты'"
+                         [isCategories]="true"
+                         [isCategoryCount]="false"
+                         [isSearch]="true"
+                         [searchPlaceholder]="'Начните вводить название ингридиента...'"
+                         [categoriesList]="filters.ingredientsCategories"
+                         [initialData]="filters.ingredients">
+          </custom-select>
+        </div>
 
-          <div class="recipe__info">
-            <span *ngIf="recipe.servingsCount">Порций: {{ recipe.servingsCount }}</span>
-            <span *ngIf="recipe.cookingTime">Время готовки: {{ recipe.cookingTime }}</span>
-            <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
-          </div>
+        <div class="form-group">
+          <custom-select *ngIf="filters.categories"
+                         formControlName="categories"
+                         (change)="proceedFilters()"
+                         [title]="'Категория'"
+                         [isSearch]="true"
+                         [isCategories]="true"
+                         [initialData]="filters.categories">
+          </custom-select>
+        </div>
 
-          <!--<p *ngIf="recipe.body">-->
-            <!--{{ recipe.body }}-->
-          <!--</p>-->
+        <div class="form-group">
+          <custom-select *ngIf="filters.destinations"
+                         formControlName="destinations"
+                         (change)="proceedFilters()"
+                         [title]="'Назначение'"
+                         [initialData]="filters.destinations">
+          </custom-select>
+        </div>
 
-        </a>
+        <div class="form-group">
+          <custom-select *ngIf="filters.country"
+                         formControlName="countries"
+                         (change)="proceedFilters()"
+                         [title]="'Кухня'"
+                         [isSearch]="true"
+                         [multiple]="true"
+                         [initialData]="filters.country">
+          </custom-select>
+        </div>
+
+      </form>
+    </aside>
+
+    <section class="recipes-list__container card" *ngIf="recipes">
+
+      <!------------------------->
+      <!-- Chosen filters      -->
+      <!------------------------->
+      <div class="recipes__selected-filters form-group">
+        <span class="card--mini"
+              *ngFor="let destination of filtersForm.value.destinations">
+
+          {{ destination.name }}
+          <i class="fas fa-times" (click)="toggleSelectedFilters(destination.id, 'destinations')"></i>
+        </span>
+
+        <span class="card--mini"
+              *ngFor="let cat of filtersForm.value.categories">
+
+          {{ cat.name }}
+          <i class="fas fa-times" (click)="toggleSelectedFilters(cat.id, 'categories')"></i>
+        </span>
+
+        <span class="card--mini"
+              *ngFor="let country of filtersForm.value.countries">
+
+          {{ country.name }}
+          <i class="fas fa-times" (click)="toggleSelectedFilters(country.id, 'countries')"></i>
+        </span>
+
+        <span class="card--mini"
+              *ngFor="let ingredient of filtersForm.value.ingredients">
+
+          {{ ingredient.name }}
+
+          <i class="fas fa-times" (click)="toggleSelectedFilters(ingredient.id, 'ingredients')"></i>
+        </span>
       </div>
 
+
+
+      <h1 class="recipes__not-found" *ngIf="!recipes.length && !paginator.total">
+        Ничего не найдено :(
+      </h1>
+
+      <p class="recipes__count" *ngIf="recipes.length && paginator.total">
+        Всего: {{ paginator.total }}
+      </p>
+
+
+
+      <div *ngIf="recipes.length && paginator.total"
+           class="recipes-list">
+        <recipe-card *ngFor="let recipe of recipes"
+                     [isLoggedIn]="isLoggedIn"
+                     [recipe]="recipe"
+                     class="recipe">
+        </recipe-card>
+      </div>
 
       <div *ngIf="paginator.nextPage && recipes"
            class="load-more lock-preloader"
-           [class.lock-element]="isLoadingMore">
+           [class.lock-element]="isLoading">
         <button type="button"
                 class="btn"
                 (click)="loadMore()">
-          load more
+          Показать еще
         </button>
       </div>
 
-    </div>
+    </section>
   </section>
 
 
