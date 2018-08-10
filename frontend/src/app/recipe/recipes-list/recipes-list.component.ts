@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {RecipeService} from "../../shared/services/recipe.service";
-import { ShortRecipe, RecipesResponse } from "../../shared/model/recipe.model";
-import { Paginator } from "../../shared/model/pagination.model";
+import {RecipeService} from "../service/recipe.service";
+import { IShortRecipe, IRecipesResponse } from "../model/recipe.model";
+import { IPaginator } from "../../shared/model/pagination.model";
 import {Observable, Subscription} from "rxjs/Rx";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {select} from "@angular-redux/store";
@@ -15,8 +15,8 @@ import {select} from "@angular-redux/store";
 export class RecipesListComponent implements OnInit, OnDestroy {
   @select() readonly isLoggedIn: Observable<boolean>;
 
-  recipes: ShortRecipe[];
-  paginator: Paginator;
+  recipes: IShortRecipe[];
+  paginator: IPaginator;
 
   isLoading: boolean = false;
   isFiltering: boolean = false;
@@ -28,7 +28,8 @@ export class RecipesListComponent implements OnInit, OnDestroy {
   filtersTimeout;
   pauseBeforeFilter: number = 500;
 
-  constructor(private recipeService: RecipeService) {
+  constructor(private recipeService: RecipeService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -53,7 +54,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.recipeService.getRecipes(1, query).subscribe(
-      (data: RecipesResponse) => {
+      (data: IRecipesResponse) => {
         this.recipes = data.recipes;
         this.paginator = data.paginator;
 
@@ -68,6 +69,9 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     );
   }
 
+
+  //todo fulltext search of ingredients, steps, body
+  //todo stemming
   initFiltersForm() {
     this.filtersForm = new FormGroup({
       query: new FormControl('', []),
@@ -104,7 +108,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     if (!this.paginator.nextPage) { return; }
 
     this.recipeService.getRecipes(this.paginator.nextPage).subscribe(
-      (data: RecipesResponse) => {
+      (data: IRecipesResponse) => {
         this.isLoading = false;
 
         this.paginator = data.paginator;

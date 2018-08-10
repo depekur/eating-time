@@ -1,0 +1,77 @@
+<div *ngIf="!hidden && positioned"
+     (click)="hidden = true"
+     class="custom-select__fixed-bg"></div>
+
+<div class="custom-select__wrapper">
+
+  <p *ngIf="title"
+     (click)="hidden = !hidden"
+     class="subtitle"
+     [class.bordered]="!isCategories && !isSearch">
+    {{ title }}
+
+    <span class="toggler">
+      <i *ngIf="hidden" class="far fa-plus-square"></i>
+      <i *ngIf="!hidden" class="far fa-minus-square"></i>
+    </span>
+  </p>
+
+  <div *ngIf="!hidden"
+       class="custom-select"
+       [class.positioned]="positioned">
+
+    <div *ngIf="data && showSelected" class="selected-items">
+      <ul>
+        <li *ngFor="let selectedItem of selected" class="card--mini">
+          <span>{{ selectedItem.name }}</span>
+          <div class="toggle-selected" (click)="toggleSelected(selectedItem)"></div>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="data && isCategories" class="categories">
+      <span (click)="activeCategoryId = 0; setDataByCategory();"
+            class="link--small"
+            [class.link--active]="activeCategoryId === 0">
+        Все подряд <i *ngIf="isCategoryCount">({{ initialData.length }})</i>
+      </span>
+
+      <span *ngFor="let category of categories"
+            (click)="activeCategoryId = category.id; setDataByCategory();"
+            class="link--small"
+            [class.link--active]="activeCategoryId === category.id">
+        {{ category.name }}
+        <i *ngIf="isCategoryCount">({{ category.childCount }})</i>
+      </span>
+    </div>
+
+
+    <div class="custom-select__search">
+      <input *ngIf="isSearch"
+             [(ngModel)]="query"
+             type="text"
+             class="inputs"
+             placeholder="{{ searchPlaceholder ? searchPlaceholder : defaultSearchPlaceholder }}">
+    </div>
+
+
+    <div class="custom-select__list"
+         [style.max-height.px]="height"
+         [class.full-height]="open">
+
+      <ul [class.disable]="isDisabled()">
+        <li *ngFor="let item of data | search: query"
+            (click)="toggleSelected(item)"
+            [class.selected]="item.selected">
+
+          <span *ngIf="isSearch"  [innerHTML]="item.name | searchHighligth:query" ></span>
+          <span *ngIf="!isSearch" >{{ item.name }}</span>
+
+          <input type="checkbox"
+                 [checked]="item.selected"
+                 [disabled]="isDisabled() && !item.selected">
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

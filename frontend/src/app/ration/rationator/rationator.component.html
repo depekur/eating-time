@@ -1,17 +1,77 @@
-<section class="rationator__container card">
+<section class="rationator__container">
 
-  <div class="rationator__nav">
-    <!--<button class="btn" type="button"><-</button>-->
+  <header class="rationator__header">
+    <!--<div class="rationator__info">-->
+      <!--<span *ngIf="isSaved">Сохранено</span>-->
+      <!--<span *ngIf="!isSaved">Не сохранено</span>-->
+    <!--</div>-->
 
-    <button class="btn" type="button">{{days.prev.dayOfWeek}}/{{days.prev.month}}</button>
-    <button class="btn" type="button">сегодня <br> {{days.current.dayOfWeek}}/{{days.current.month}} </button>
-    <button class="btn" type="button">{{days.next.dayOfWeek}}/{{days.next.month}}</button>
 
-    <!--<button class="btn" type="button">-></button>-->
+    <div class="rationator__nav">
+      <button class="btn--mini" type="button" (click)="prevDay()">
+        <i class="fas fa-arrow-circle-left"></i>
+      </button>
+      <button class="btn--mini" type="button">{{ currentDate.date }}</button>
+      <button class="btn--mini" type="button" (click)="nextDay()">
+        <i class="fas fa-arrow-circle-right"></i>
+      </button>
+    </div>
+  </header>
+
+
+
+
+  <div *ngIf="rationDay"
+       class="rationator lock-preloader card"
+       [class.lock-element]="isLoading">
+
+    <div *ngFor="let eating of rationDay.food; let i = index"
+         mwlDroppable
+         class="rationator__eating"
+         [class.rationator__eating--dragged]="isDragged[i]"
+         [class.rationator__eating--active]="(activeEating$ | async) === (i+1)"
+         (click)="updateActiveEating(i+1)"
+         (dragEnter)="isDragged[i] = true"
+         (dragLeave)="isDragged[i] = false"
+         (drop)="onDropRecipe($event.dropData, i); isDragged[i] = false">
+
+
+      <div class="eating__time">{{ eating.eatingTime.time }}</div>
+
+      <div *ngIf="!eating.dishes.length || rationDay.food[i].textBody"
+           class="eating__empty">
+
+      </div>
+
+      <div class="eating__card">
+
+
+
+
+        <div *ngFor="let dish of eating.dishes"
+             class="rationator__recipe">
+          <p>{{ dish.recipeTitle }}</p>
+
+          <!--<input type="text" class="inputs" placeholder="Кол-во">-->
+
+          <button type="button"
+                  class="btn--delete">
+            <i class="fas fa-times"></i>
+          </button>
+
+        </div>
+
+
+
+        <textarea [(ngModel)]="rationDay.food[i].textBody"
+                  *ngIf="eating.dishes.length"></textarea>
+      </div>
+
+
+
+
+
+    </div>
+
   </div>
-
-  <div class="rationator">
-
-  </div>
-
 </section>

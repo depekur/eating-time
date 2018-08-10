@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export interface IParsedDate {
   date: Date;
   day: string;
@@ -46,31 +48,27 @@ const months = [
 ];
 
 export class DateParser {
-  static parse(timestamp: number): IParsedDate {
-    let date = new Date(timestamp);
-
+  static parse(date) {
     return {
-      timestamp: timestamp,
-      date: date,
-      day: (date.getDate() < 10) ? `0${date.getDate()}` : `${date.getDate()}`,
-      dayOfWeek: ((date.getDay() === 0) ? 7 : date.getDay()),
-      month: (date.getMonth()+1 < 10) ? `0${date.getMonth()+1}` : `${date.getMonth()+1}`,
-      year: date.getFullYear(),
-
-      textShortDay: days.shortDays[date.getDay()],
-      textDay: days.fullDays[date.getDay()],
-      textMonth: months[date.getMonth()],
+      date: date.format('DD/MM/YYYY'),
+      timestamp: date.unix()
     };
   }
 
-  static nextDay(timestamp: number) {
-    let nextDate = new Date(timestamp + (24 * 60 * 60 * 1000)).getTime();
+  static today() {
+    let today = moment().subtract(1, 'days').startOf('day');
+
+    return DateParser.parse(today);
+  }
+
+  static nextDay(date) {
+    let nextDate = moment.unix(date).add(1, 'day');
 
     return DateParser.parse(nextDate);
   }
 
-  static prevDay(timestamp: number) {
-    let prevDate = new Date(timestamp - (24 * 60 * 60 * 1000)).getTime();
+  static prevDay(date) {
+    let prevDate = moment.unix(date).subtract(1, 'day');
 
     return DateParser.parse(prevDate);
   }

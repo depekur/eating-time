@@ -1,43 +1,70 @@
 <div class="card recipe"
-     id="recipe-{{ recipe.id }}">
+     id="recipe-{{ recipe.id }}"
+     mwlDraggable
+     ghostDragEnabled="true"
+     [class.recipe--dragged]="dragged"
+     (dragging)="dragged = true"
+     (dragEnd)="dragged = false"
+     [dropData]="dropData">
 
-  <favorite-recipe *ngIf="isLoggedIn | async"
-                   [recipeId]="recipe.id"
-                   [favorite]="recipe.favorites"></favorite-recipe>
 
-  <a routerLink="/recipe/{{ recipe.id }}">
+  <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
+  <!--<span class="card" *ngFor="let category of recipe.categories">-->
+  <!--{{ category.category_name }}-->
+  <!--</span>-->
+  <!--</div>-->
 
-    <h2>{{ recipe.title }}</h2>
+  <figure>
+    <img *ngIf="recipe.img"
+         class="recipe__img"
+         src="{{ recipe.img }}"
+         alt="{{ recipe.title }}">
+  </figure>
 
-    <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
-    <!--<span class="card" *ngFor="let category of recipe.categories">-->
-    <!--{{ category.category_name }}-->
-    <!--</span>-->
+  <div class="recipe__info">
+    <h2 class="recipe__title">{{ recipe.title }}</h2>
+
+    <!--<div *ngIf="recipe.destinations" class="recipe__info__destinations">-->
+      <!--<span *ngFor="let destination of recipe.destinations"-->
+            <!--class="">-->
+        <!--{{ destination.name }}-->
+      <!--</span>-->
     <!--</div>-->
 
-    <div *ngIf="recipe.destinations" class="recipe__destinations">
-            <span *ngFor="let destination of recipe.destinations"
-                  class="" >
-              {{ destination.name }}
-            </span>
-    </div>
-
-    <figure>
-      <img *ngIf="recipe.img"
-           class="recipe__img"
-           src="{{ recipe.img }}"
-           alt="{{ recipe.title }}">
-    </figure>
-
-    <div class="recipe__info">
-      <span *ngIf="recipe.servingsCount">Порций: {{ recipe.servingsCount }}</span>
-      <span *ngIf="recipe.cookingTime">Время готовки: {{ recipe.cookingTime }}</span>
+    <div class="recipe__info__filters">
+      <span *ngIf="recipe.servingsCount">{{ recipe.servingsCount | wordEndings: ['порция',  'порции', 'порций']}} </span>
+      <span *ngIf="recipe.cookingTime">{{ recipe.cookingTime | wordEndings: ['минута',  'минуты', 'минут']}}</span>
       <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
+
     </div>
 
-    <!--<p *ngIf="recipe.body">-->
-    <!--{{ recipe.body }}-->
-    <!--</p>-->
 
-  </a>
+
+    <nav class="recipe__nav">
+      <ul>
+        <li>
+          <button type="button"
+                  class="btn--mini"
+                  (click)="addRecipeToRation(recipe.id)">
+            <i class="fas fa-plus-square"></i> В меню
+          </button>
+        </li>
+
+        <li>
+          <favorite-recipe *ngIf="isLoggedIn | async"
+                           [recipeId]="recipe.id"
+                           [favorite]="recipe.favorites">
+          </favorite-recipe>
+        </li>
+
+        <li>
+          <a class="link" routerLink="/recipe/{{ recipe.id }}">Подробнее</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+
+
+
 </div>

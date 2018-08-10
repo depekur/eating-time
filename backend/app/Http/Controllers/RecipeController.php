@@ -38,9 +38,8 @@ class RecipeController extends Controller
       'destinations' => RecipeController::prepareRecipeDestinations(App\Destination::all()->toArray()),
       'categories' => RecipeController::prepareRecipeCategories(App\Category::all()->toArray()),
       'country' => RecipeController::prepareCountries(App\Country::all()->toArray()),
-      'ingredientsCategories' => App\IngredientsCategory::select('id', 'category as name')->get(),
       'ingredients' => App\Ingredient::where('synonym_of_id', '=', 0)
-                          ->select('id', 'name', 'category', 'parent_id as parent')
+                          ->select('id', 'name')
                           ->get()
     ];
   }
@@ -61,9 +60,7 @@ class RecipeController extends Controller
 
   public function getRecipes(Request $request)
   {
-    //$token = $request->bearerToken();
-
-    //dd(JWTAuth::parseToken()->toUser()->user_id);
+    $token = JWTAuth::getToken();
 
     $destinations = Input::get('destinations');
     $categories = Input::get('categories');
@@ -73,9 +70,9 @@ class RecipeController extends Controller
 
     $recipe_query = App\Recipe::with(['categories', 'destinations']);
 
-//    if ($token) {
-//      $recipe_query->with('favorites');
-//    }
+    if ($token) {
+      $recipe_query->with('favorites');
+    }
 
     if ($search_query) {
       $recipe_query->where('title', 'LIKE', '%'.$search_query.'%');
@@ -103,11 +100,8 @@ class RecipeController extends Controller
       });
     }
 
-    //$data = App\Recipe::with(['categories', 'destinations'])->paginate(3);
-
-
     $count = $recipe_query->count();
-    $data = $recipe_query->paginate(6);
+    $data = $recipe_query->paginate(16);
 
     return [
       'paginator' => [
@@ -122,79 +116,58 @@ class RecipeController extends Controller
     ];
   }
 
-  public function addToFavorite(Request $request) {
-    $token = $request->bearerToken();
-    $user_id = JWTAuth::toUser($token)->user_id;
-
-    $recipe_id = $request->recipeId;
-
-    $fav = new App\FavoriteRecipe();
-    $fav->recipe_id = $recipe_id;
-    $fav->user_id = $user_id;
-    $fav->save();
-
-    return $fav;
-  }
-
-  public function deleteFromFavorite(Request $request, $id) {
-    $token = $request->bearerToken();
-    $user_id = JWTAuth::toUser($token)->user_id;
-
-    return App\FavoriteRecipe::where('recipe_id', $id)->where('user_id', $user_id)->delete();
-  }
-
   public function saveRecipe(Request $request)
-  {
+    {
 //    $this->validate($request, [
 //      'photo' => 'required|file|mimes:jpg,jpeg,png,bmp,gif',
 //    ]);
 
-    $token = $request->bearerToken();
-    $user = JWTAuth::toUser($token);
+      $token = $request->bearerToken();
+      $user = JWTAuth::toUser($token);
 
-    $recipe = new App\Recipe();
+      $recipe = new App\Recipe();
 
-    $recipe->user_id = $user->user_id;
-    $recipe->servings_count = $request->servings_count ? $recipe->servings_count : 0;
-    $recipe->title = $request->title;
-    $recipe->body = $request->body;
+      $recipe->user_id = $user->user_id;
+      $recipe->servings_count = $request->servings_count ? $recipe->servings_count : 0;
+      $recipe->title = $request->title;
+      $recipe->body = $request->body;
 
-    $recipe->img_name = $request->photo[0]['hash'];
+      $recipe->img_name = $request->photo[0]['hash'];
 
-    $recipe->calories = $request->calories;
-    $recipe->cooking_time = $request->cookingTime;
-    $recipe->servings_count = $request->servingsCount;
+      $recipe->calories = $request->calories;
+      $recipe->cooking_time = $request->cookingTime;
+      $recipe->servings_count = $request->servingsCount;
 
-    if (!empty($request->countries)) {
-      $recipe->country_id = $request->countries[0]['id'];
-    }
-
-    $recipe->save();
-
-    RecipeController::moveRecipePhoto($request->photo[0]['hash'], $recipe->recipe_id);
-
-    if (!empty($request->ingredients)) {
-      if (!empty($request->ingredients[0]['id']) && !empty($request->ingredients[0]['name'])) {
-        RecipeController::saveIngredients($request->ingredients, $recipe);
+      if (!empty($request->countries)) {
+        $recipe->country_id = $request->countries[0]['id'];
       }
-    }
 
-    if (!empty($request->categories)) {
-      RecipeController::saveCategories($request->categories, $recipe);
-    }
+      $recipe->save();
 
-    if (!empty($request->destinations)) {
-      RecipeController::saveDestinations($request->destinations, $recipe);
-    }
+      RecipeController::moveRecipePhoto($request->photo[0]['hash'], $recipe->recipe_id);
 
-    if (!empty($request->steps)) {
-      if (!empty($request->steps[0]['step_text']) || !empty($request->steps[0]['step_photo'])) {
-        RecipeController::saveSteps($request->steps, $recipe);
+      if (!empty($request->ingredients)) {
+        if (!empty($request->ingredients[0]['id']) && !empty($request->ingredients[0]['name'])) {
+          RecipeController::saveIngredients($request->ingredients, $recipe);
+        }
       }
-    }
+
+      if (!empty($request->categories)) {
+        RecipeController::saveCategories($request->categories, $recipe);
+      }
+
+      if (!empty($request->destinations)) {
+        RecipeController::saveDestinations($request->destinations, $recipe);
+      }
+
+      if (!empty($request->steps)) {
+        if (!empty($request->steps[0]['step_text']) || !empty($request->steps[0]['step_photo'])) {
+          RecipeController::saveSteps($request->steps, $recipe);
+        }
+      }
 
 
-   // dd($url);
+      // dd($url);
 //
 //    $respRecipe = App\Recipe::with(['steps', 'ingredients', 'categories', 'destinations'])
 //      ->where('recipe_id', $recipe->recipe_id )
@@ -208,13 +181,9 @@ class RecipeController extends Controller
     return response()->json(['id' => $recipe->recipe_id]);
   }
 
-
-
   private function moveRecipePhoto($file_name, $recipe_id)
   {
     Storage::move('temp/'.$file_name, 'images/'.$recipe_id.'/'.$file_name);
-
-    //$url = Storage::url($recipe->recipe_id .'/'. $request->photo[0]['hash']);
   }
 
   private function saveIngredients($ingredients, $recipe)
@@ -261,12 +230,6 @@ class RecipeController extends Controller
       $stp->step_number = $step['id'];
       $stp->description = $step['step_text'];
 
-      if (!empty($step['step_photo'])) {
-        $stp->img_name = $step['step_photo'][0]['hash'];
-
-        RecipeController::moveRecipePhoto($step['step_photo'][0]['hash'], $recipe->recipe_id);
-      }
-
       $stp->save();
     }
   }
@@ -276,18 +239,32 @@ class RecipeController extends Controller
     $recipe_storage_url = Storage::url('/');
 
     return array_map(function($recipe) use ($recipe_storage_url) {
-      return [
+      $token = JWTAuth::getToken();
+
+      $short_recipe = [
+        'is_parsed' => $recipe['is_short_recipe'],
         'id' => $recipe['recipe_id'],
         'title' => $recipe['title'],
         'calories' => $recipe['calories'],
         'cookingTime' => $recipe['cooking_time'],
         'servingsCount' => $recipe['servings_count'],
-        'favorites' => count($recipe['favorites']) ? true : false,
-
-        'img' => $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'],
+        //'img' => $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'],
         'destinations' => RecipeController::prepareRecipeDestinations($recipe['destinations']->toArray()),
         'categories' => RecipeController::prepareRecipeCategories($recipe['categories']->toArray())
       ];
+
+      if ($recipe['is_short_recipe']) {
+        $short_recipe['img'] = $recipe['img_name'];
+        $short_recipe['parsed_url'] = $recipe['recipe_link'];
+      } else {
+        $short_recipe['img'] = $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'];
+      }
+
+      if ($token) {
+        $short_recipe['favorites'] = count($recipe['favorites']) ? true : false;
+      }
+
+      return $short_recipe;
     }, $recipes);
   }
 
@@ -301,7 +278,7 @@ class RecipeController extends Controller
       'body' => $recipe['body'],
       'calories' => $recipe['calories'],
       'cookingTime' => $recipe['cooking_time'],
-      'img' => $recipe_storage_url . $recipe['img_name'],
+      //'img' => $recipe_storage_url . $recipe['img_name'],
       'isShortRecipe' => $recipe['is_short_recipe'],
       'servingsCount' => $recipe['servings_count'],
 
@@ -318,6 +295,13 @@ class RecipeController extends Controller
       ],
     ];
 
+    if ($recipe['is_short_recipe']) {
+      $prepared_recipe['img'] = $recipe['img_name'];
+      $prepared_recipe['parsed_url'] = $recipe['recipe_link'];
+    } else {
+      $prepared_recipe['img'] = $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'];
+    }
+
     $prepared_recipe['destinations'] = RecipeController::prepareRecipeDestinations($recipe['destinations']->toArray());
     $prepared_recipe['categories'] = RecipeController::prepareRecipeCategories($recipe['categories']->toArray());
 
@@ -333,12 +317,20 @@ class RecipeController extends Controller
       ];
     }, $recipe['ingredients']->toArray());
 
-    $prepared_recipe['steps'] = array_map(function($step) use ($recipe_storage_url) {
-      return [
+    $prepared_recipe['steps'] = array_map(function($step) use ($recipe_storage_url, $recipe) {
+      $stp = [
         'id' => $step['step_number'],
         'body' => $step['description'],
-        'img' => $step['img_name'] ? $recipe_storage_url . $step['img_name'] : null,
+        //'img' => $step['img_name'] ? $recipe_storage_url . $step['img_name'] : null,
       ];
+
+      if ($recipe['is_short_recipe']) {
+        $stp['img'] = $step['img_name'] ? $step['img_name'] : null;
+      } else {
+        $stp['img'] = $step['img_name'] ? $recipe_storage_url . $step['img_name'] : null;
+      }
+
+      return $stp;
     }, $recipe['steps']->toArray());
 
     return $prepared_recipe;

@@ -6,7 +6,7 @@ import { patterns, counts } from '../../shared/form-patterns';
 import { JwtService } from '../../shared/services/jwt.service';
 import { validationMessages } from '../../shared/form-errors';
 import { CustomValidations } from '../../shared/custom-validation';
-import { LoginResponse } from '../auth.model';
+import { ILoginResponse } from '../auth.model';
 import {APP_EVENTS, IAppState} from "../../store";
 import {NgRedux} from "@angular-redux/store";
 import {UserService} from "../../shared/services/user.service";
@@ -68,7 +68,7 @@ export class RegistrationComponent implements OnInit {
 
     this.authService.register(this.registerForm.value)
       .subscribe(
-        (data: LoginResponse) => {
+        (data: ILoginResponse) => {
           this.jwtService.setToken(data.token);
           this.ngRedux.dispatch({ type: APP_EVENTS.LOGIN });
           this.userService.getUser();

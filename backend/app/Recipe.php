@@ -54,6 +54,7 @@ class Recipe extends Model
         return $this->belongsToMany('App\User', 'favorite_recipes', 'recipe_id', 'user_id')
           ->where('favorite_recipes.user_id', JWTAuth::parseToken()->toUser()->user_id);
       } else {
+        //return false;
         return $this->belongsToMany('App\User', 'favorite_recipes', 'recipe_id', 'user_id');
       }
     }

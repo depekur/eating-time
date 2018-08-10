@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/index';
 import { JwtService } from '../shared/services/jwt.service';
-import { LoginFormData, LoginResponse, RegisterFormData } from './auth.model';
+import { LoginFormData, ILoginResponse, RegisterFormData } from './auth.model';
 import { apiUrls } from '../app-config';
 import {Router} from "@angular/router";
 import {APP_EVENTS, IAppState} from "../store";

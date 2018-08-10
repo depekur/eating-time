@@ -20,6 +20,6 @@ export class RegisterFormData {
   }
 }
 
-export interface LoginResponse {
+export interface ILoginResponse {
   token: string;
 }

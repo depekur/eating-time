@@ -1,7 +1,15 @@
+@import "../../../assets/style/var";
+
 .recipe {
 
-  h2 {
-    //padding: 10px;
+  &.recipe--dragged {
+    cursor: hand;
+
+    figure,
+    .recipe__info__filters span,
+    .recipe__nav {
+      display: none;
+    }
   }
 
   figure {
@@ -14,9 +22,50 @@
   }
 
   .recipe__info {
-    span {
-      display: inline-block;
-      padding: 0 10px;
+    padding: 10px 10px;
+
+    color: lighten($banana-color-13, 20%);
+
+    .recipe__title {
+      padding-bottom: 10px;
+
+      font-size: 22px;
+      line-height: 26px;
+      color: $banana-color-13;
+    }
+
+    .recipe__info__destinations {
+      display: flex;
+      justify-content: flex-start;
+
+      margin-bottom: 15px;
+    }
+
+    .recipe__info__filters {
+      display: flex;
+      justify-content: flex-start;
+
+      span {
+        padding-right: 15px;
+      }
+    }
+
+    .recipe__nav {
+      padding: 10px 0 0;
+      margin-top: 10px;
+      border-top: 1px solid $banana-color-4;
+
+      ul {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        li {
+          display: inline-block;
+        }
+      }
     }
   }
+
+
 }

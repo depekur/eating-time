@@ -1,9 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {apiUrls} from "../../app-config";
-import { IAppState, APP_EVENTS } from "../../store";
+import {IAppState, APP_EVENTS} from "../../store";
 import {NgRedux} from "@angular-redux/store";
 
+interface IUserResponse {
+  user: any;
+  settings: any;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +20,14 @@ export class UserService {
 
   getUser() {
     return this.http.get(apiUrls.userInfo).subscribe(
-      user => {
-        this.ngRedux.dispatch({ type: APP_EVENTS.SAVE_USER, body: user });
+      (userData: IUserResponse) => {
+        this.ngRedux.dispatch({type: APP_EVENTS.SAVE_USER, body: userData.user});
+        this.ngRedux.dispatch({type: APP_EVENTS.SAVE_SETTINGS, body: userData.settings.eating_time});
 
-        return user;
+        return userData.user;
       },
       error => {
-        console.warn(error);
+        console.error(error);
       }
     );
   }

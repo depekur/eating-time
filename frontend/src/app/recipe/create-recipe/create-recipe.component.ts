@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators, FormBuilder, FormArray} from "@angul
 import {counts, patterns} from "../../shared/form-patterns";
 
 import {Observable, Subscription} from "rxjs/Rx";
-import {RecipeService} from '../../shared/services/recipe.service';
+import {RecipeService} from '../service/recipe.service';
 import {validationMessages} from "../../shared/form-errors";
 import {Router} from "@angular/router";
 

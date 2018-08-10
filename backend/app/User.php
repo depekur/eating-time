@@ -68,4 +68,9 @@ class User extends Authenticatable
                     ->as('menu_info')
                     ->withPivot('count', 'measure');
     }
+
+    public function settings()
+    {
+      return $this->belongsTo('App\Settings', 'user_id', 'user_id');
+    }
 }

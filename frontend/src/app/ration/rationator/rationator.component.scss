@@ -1,7 +1,70 @@
-.rationator__container {
-  display: flex;
-  justify-content: center;
+@import "../../../assets/style/var";
 
-  padding: 20px;
-  margin-right: 30px;
+.rationator__container {
+  padding: 0;
+
+  .rationator__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+  }
+
+  .rationator {
+    padding: 10px;
+  }
+
+  .rationator__eating {
+    padding: 10px 10px 15px;
+
+    .eating__empty {
+      height: 68px;
+      width: 68px;
+      margin: 0 auto;
+
+
+      background-image: url('../../../assets/img/food.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    .eating__time {
+      margin-bottom: 10px;
+
+      font-weight: bold;
+      color: $banana-color-16;
+
+      //border-bottom: 1px solid $banana-color-16;
+    }
+
+    div.eating__card {
+    }
+
+    //border: 1px solid $banana-color-1;
+
+    &.rationator__eating--active {
+      border: 2px dashed $banana-color-16;
+
+      .eating__empty {
+        background-image: url('../../../assets/img/food_active.png');
+      }
+    }
+
+    &.rationator__eating--dragged {
+      border: 2px dashed $banana-color-8;
+    }
+
+    .rationator__recipe {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 10px;
+
+      border: 1px solid $banana-color-1;
+      font-size: 14px;
+    }
+  }
 }

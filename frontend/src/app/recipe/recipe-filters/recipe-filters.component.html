@@ -1,0 +1,60 @@
+<aside *ngIf="filters"
+       class="recipes__filters lock-preloader"
+       [class.filters--mobile]="showFilters"
+       [class.lock-element]="isLoading">
+
+  <form [formGroup]="filtersForm">
+
+    <input type="text"
+           formControlName="query"
+           (input)="proceedFilters()"
+           class="inputs card recipes__search-query"
+           placeholder="Поиск по названию">
+
+    <div class="form-group" >
+      <custom-select *ngIf="filters.ingredients"
+                     formControlName="ingredients"
+                     (change)="proceedFilters()"
+                     [title]="'Ингридиенты'"
+                     [isCategories]="true"
+                     [isCategoryCount]="false"
+                     [isSearch]="true"
+                     [searchPlaceholder]="'Начните вводить название ингридиента...'"
+                     [categoriesList]="filters.ingredientsCategories"
+                     [initialData]="filters.ingredients">
+      </custom-select>
+    </div>
+
+    <div class="form-group">
+      <custom-select *ngIf="filters.categories"
+                     formControlName="categories"
+                     (change)="proceedFilters()"
+                     [title]="'Категория'"
+                     [isSearch]="true"
+                     [isCategories]="true"
+                     [initialData]="filters.categories">
+      </custom-select>
+    </div>
+
+    <div class="form-group">
+      <custom-select *ngIf="filters.destinations"
+                     formControlName="destinations"
+                     (change)="proceedFilters()"
+                     [title]="'Назначение'"
+                     [initialData]="filters.destinations">
+      </custom-select>
+    </div>
+
+    <div class="form-group">
+      <custom-select *ngIf="filters.country"
+                     formControlName="countries"
+                     (change)="proceedFilters()"
+                     [title]="'Кухня'"
+                     [isSearch]="true"
+                     [multiple]="true"
+                     [initialData]="filters.country">
+      </custom-select>
+    </div>
+
+  </form>
+</aside>

@@ -1,10 +1,12 @@
 <div class="ration__container">
-    <aside>
-      <rationator [currentDay]="day"></rationator>
-    </aside>
+  <section>
+    <ration-nav class="ration__nav"></ration-nav>
+    <router-outlet></router-outlet>
+  </section>
 
-    <section>
-      <ration-nav class="ration__nav"></ration-nav>
-      <router-outlet></router-outlet>
-    </section>
+  <aside>
+    <rationator [currentDay]="day"></rationator>
+  </aside>
+
+
 </div>

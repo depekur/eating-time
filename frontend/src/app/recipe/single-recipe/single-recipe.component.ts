@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {RecipeService} from "../../shared/services/recipe.service";
-import { FullRecipe } from "../../shared/model/recipe.model";
+import {RecipeService} from "../service/recipe.service";
+import { IFullRecipe } from "../model/recipe.model";
 
 @Component({
   selector: 'app-single-recipe',
@@ -10,7 +10,7 @@ import { FullRecipe } from "../../shared/model/recipe.model";
 })
 export class SingleRecipeComponent implements OnInit {
   recipeId: number;
-  recipe: FullRecipe;
+  recipe: IFullRecipe;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService) {
@@ -28,7 +28,7 @@ export class SingleRecipeComponent implements OnInit {
 
   getRecipe() {
     this.recipeService.getSingleRecipe(this.recipeId).subscribe(
-      (data: FullRecipe) => {
+      (data: IFullRecipe) => {
         this.recipe = data;
       },
       error => {

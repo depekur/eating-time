@@ -18,6 +18,7 @@
             <div class="form-group">
               <custom-select *ngIf="filters.categories"
                              formControlName="categories"
+                             [hidden]="false"
                              [title]="'Категория'"
                              [isCategories]="true"
                              [isCategoryCount]="true"
@@ -29,6 +30,7 @@
             <div class="form-group">
               <custom-select *ngIf="filters.country"
                              [title]="'Кухня'"
+                             [hidden]="false"
                              formControlName="countries"
                              [multiple]="false"
                              [isSearch]="true"
@@ -39,6 +41,7 @@
             <div class="form-group">
               <custom-select *ngIf="filters.destinations"
                              formControlName="destinations"
+                             [hidden]="false"
                              [title]="'Назначение'"
                              [initialData]="filters.destinations">
               </custom-select>
@@ -235,9 +238,7 @@
                            [height]="400"
                            [title]="'Ингридиенты'"
                            formControlName="ingredients"
-                           [isCategories]="true"
-                           [isCategoryCount]="true"
-                           [categoriesList]="filters.ingredientsCategories"
+                           [hidden]="false"
                            [isSearch]="true"
                            [searchPlaceholder]="'Начните вводить название ингридиента...'"
                            [initialData]="filters.ingredients">

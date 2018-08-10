@@ -1,4 +1,4 @@
-export interface Paginator {
+export interface IPaginator {
   currentPage: number;
   nextPage: number|boolean;
   lastPage: number;

@@ -67,12 +67,27 @@
   }
 }
 
-.btn--delete {
+.btn--mini {
   @extend .btn;
   padding: 6px 8px;
 
+  color: $banana-color-16;
+  background-color: $banana-color-14;
+
+  &:hover {
+    color: $banana-color-17;
+    background-color: $banana-color-15;
+  }
+}
+
+.btn--delete {
+  @extend .btn;
+  padding: 0 5px;
+
   color: $banana-color-15;
   background-color: $banana-color-3;
+
+  font-size: 11px;
 
   &:hover {
     color: $banana-color-15;

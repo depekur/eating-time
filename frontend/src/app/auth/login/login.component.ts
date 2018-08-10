@@ -5,7 +5,7 @@ import { validationMessages } from '../../shared/form-errors';
 import { JwtService } from '../../shared/services/jwt.service';
 import { CustomValidations } from '../../shared/custom-validation';
 import { AuthService } from '../auth.service';
-import { LoginResponse } from '../auth.model';
+import { ILoginResponse } from '../auth.model';
 import { Router } from '@angular/router';
 import {UserService} from "../../shared/services/user.service";
 import {APP_EVENTS, IAppState} from "../../store";
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginRequest(this.loginForm.value)
       .subscribe(
-        (data: LoginResponse) => {
+        (data: ILoginResponse) => {
           this.jwtService.setToken(data.token);
           this.ngRedux.dispatch({ type: APP_EVENTS.LOGIN });
           this.userService.getUser();
