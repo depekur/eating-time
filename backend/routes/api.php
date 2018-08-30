@@ -28,6 +28,7 @@ Route::post('recover', 'Auth\ApiRecoverPassController@recover');
 
 //Route::get('seed-ingredients', 'IngredientsSeeder@index');
 //Route::get('seed-recipes', 'RecipesSeeder@index');
+Route::get('seed-recipes-steps', 'RecipesSeeder@updateEmptySteps');
 
 Route::get('/test', 'Auth\APIRegisterController@test');
 

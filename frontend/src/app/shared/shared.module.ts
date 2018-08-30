@@ -17,6 +17,9 @@ import {WeekRationComponent} from "../ration/week-ration/week-ration.component";
 import {RationatorComponent} from "../ration/rationator/rationator.component";
 import {DragAndDropModule} from "angular-draggable-droppable";
 import { PortionPipe } from './pipe/portion.pipe';
+import { ToTopComponent } from './components/to-top/to-top.component';
+import { StickDirective } from './directive/stick.directive';
+import {InfoMessageComponent} from "./components/info-message/info-message.component";
 
 
 @NgModule({
@@ -43,7 +46,10 @@ import { PortionPipe } from './pipe/portion.pipe';
     FavoriteRecipeComponent,
     CalendarComponent,
     WeekRationComponent,
-    RationatorComponent
+    RationatorComponent,
+    ToTopComponent,
+    StickDirective,
+    InfoMessageComponent
   ],
   declarations: [
     CustomSelectComponent,
@@ -58,7 +64,10 @@ import { PortionPipe } from './pipe/portion.pipe';
     CalendarComponent,
     WeekRationComponent,
     RationatorComponent,
-    PortionPipe
+    PortionPipe,
+    ToTopComponent,
+    StickDirective,
+    InfoMessageComponent
   ]
 })
 export class SharedModule { }

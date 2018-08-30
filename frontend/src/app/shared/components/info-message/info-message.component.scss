@@ -1,0 +1,23 @@
+.alert {
+  position: fixed;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+
+  width: 100%;
+  margin-bottom: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  border-radius: 0;
+
+  z-index: 9999;
+
+  div {
+    flex:1 1 auto;
+  }
+}
+
+.btn {
+  background: transparent;
+}

@@ -32,7 +32,9 @@ export class RecipeService {
 
   private prepareQuery(query, options): HttpParams {
     Object.keys(query).forEach((paramName) => {
-      if (paramName === 'query') {
+      if (paramName === 'query' && query[paramName]) {
+        options.params = options.params.append(paramName, query[paramName]);
+      } else if (paramName == 'random' && query[paramName]) {
         options.params = options.params.append(paramName, query[paramName]);
       } else if (query[paramName]) {
         let params = '';

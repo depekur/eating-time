@@ -15,6 +15,7 @@ export interface IShortRecipe {
   favorites: boolean;
   cookingTime: number;
   servingsCount: number;
+  ingredients: Ingredient[];
   categories: IRecipeCategory[];
   destinations: IRecipeDestination[];
 }

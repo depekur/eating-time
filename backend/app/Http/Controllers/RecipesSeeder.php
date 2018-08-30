@@ -14,10 +14,10 @@ class RecipesSeeder extends Controller
     $path = storage_path() . "/json/recipes_";
     $recipe_files = array_diff(scandir($path), array('..', '.'));
 
-    foreach($recipe_files as $recipe_file) {
+    foreach ($recipe_files as $recipe_file) {
       $recipes = json_decode(file_get_contents($path . '/' . $recipe_file));
 
-      foreach($recipes as $recipe) {
+      foreach ($recipes as $recipe) {
         $_recipe = new App\Recipe();
 
         $_recipe->is_short_recipe = 1;
@@ -98,17 +98,17 @@ class RecipesSeeder extends Controller
 
         if (!empty($recipe->steps)) {
           if (!empty($recipe->steps[0]->body) || !empty($recipe->steps[0]->img)) {
-            foreach ($recipe->steps as $key=>$step) {
+            foreach ($recipe->steps as $key => $step) {
 
 
-              if(isset($step->body)) {
+              if (isset($step->body)) {
                 $stp = new App\RecipeStep();
 
                 $stp->recipe_id = $_recipe->recipe_id;
-                $stp->step_number = $key+1;
+                $stp->step_number = $key + 1;
                 $stp->description = $step->body;
 
-                if(isset($step->img)) {
+                if (isset($step->img)) {
                   $stp->img_name = $step->img;
                 }
 
@@ -119,6 +119,42 @@ class RecipesSeeder extends Controller
         }
 
         //dd($recipe);
+      }
+    }
+  }
+
+  public function updateEmptySteps()
+  {
+    ini_set('max_execution_time', 9000);
+
+
+//    $_recipe = App\Recipe::where('recipe_link', 'https://www.povarenok.ru/recipes/show/88021/')->get()->toArray();
+//
+//    dd($_recipe[0]['recipe_id']);
+
+
+    $path = storage_path() . "/json/recipes-without-steps";
+    $recipe_files = array_diff(scandir($path), array('..', '.'));
+
+    foreach ($recipe_files as $recipe_file) {
+      $recipes = json_decode(file_get_contents($path . '/' . $recipe_file));
+
+      foreach ($recipes as $recipe) {
+        $_recipe = App\Recipe::where('recipe_link', $recipe->url)->get()->toArray()[0];
+
+        if (!empty($recipe->steps)) {
+          if (isset($recipe->steps[0]->body)) {
+            if (!empty($recipe->steps[0]->body)) {
+              $stp = new App\RecipeStep();
+
+              $stp->recipe_id = $_recipe['recipe_id'];
+              $stp->step_number = 1;
+              $stp->description = $recipe->steps[0]->body;
+
+              $stp->save();
+            }
+          }
+        }
       }
     }
   }

@@ -67,8 +67,10 @@ class RecipeController extends Controller
     $countries = Input::get('countries');
     $ingredients = Input::get('ingredients');
     $search_query = Input::get('query');
+    $is_random = Input::get('random');
 
-    $recipe_query = App\Recipe::with(['categories', 'destinations']);
+
+    $recipe_query = App\Recipe::with(['ingredients', 'categories', 'destinations']);
 
     if ($token) {
       $recipe_query->with('favorites');
@@ -100,19 +102,39 @@ class RecipeController extends Controller
       });
     }
 
-    $count = $recipe_query->count();
-    $data = $recipe_query->paginate(16);
+    if ($is_random) {
+      $count = 1;
+      $data = $recipe_query->inRandomOrder()->first();
 
-    return [
-      'paginator' => [
+      $paginator = [
+        'currentPage' => 1,
+        'nextPage' => 1,
+        'lastPage' => 1,
+        'perPage' => 1,
+        'total' => 1
+      ];
+
+      $recipes = RecipeController::prepareSingleShortRecipeData($data->toArray());
+
+    } else {
+      $count = $recipe_query->count();
+      $data = $recipe_query->orderBy('title', 'desc')->paginate(5);
+
+      $paginator = [
         'currentPage' => $data->currentPage(),
         'nextPage' => $data->hasMorePages() ? $data->currentPage() + 1 : false,
         'lastPage' => $data->lastPage(),
         'perPage' => $data->perPage(),
         'total' => $data->total()
-      ],
+      ];
+
+      $recipes = RecipeController::prepareShortRecipeData($data->items());
+    }
+
+    return [
+      'paginator' => $paginator,
       'count' => $count,
-      'recipes' => RecipeController::prepareShortRecipeData($data->items())
+      'recipes' => $recipes
     ];
   }
 
@@ -253,6 +275,14 @@ class RecipeController extends Controller
         'categories' => RecipeController::prepareRecipeCategories($recipe['categories']->toArray())
       ];
 
+      $short_recipe['ingredients'] = array_map(function($ingredient) {
+        return [
+          'id' => $ingredient['id'],
+          'name' => $ingredient['name'],
+          'quantity' => $ingredient['info']['quantity']
+        ];
+      }, $recipe['ingredients']->toArray());
+
       if ($recipe['is_short_recipe']) {
         $short_recipe['img'] = $recipe['img_name'];
         $short_recipe['parsed_url'] = $recipe['recipe_link'];
@@ -266,6 +296,47 @@ class RecipeController extends Controller
 
       return $short_recipe;
     }, $recipes);
+  }
+
+  private function prepareSingleShortRecipeData($recipe) {
+    $recipe_storage_url = Storage::url('/');
+
+    $token = JWTAuth::getToken();
+
+    $short_recipe = [
+      'is_parsed' => $recipe['is_short_recipe'],
+      'id' => $recipe['recipe_id'],
+      'title' => $recipe['title'],
+      'calories' => $recipe['calories'],
+      'cookingTime' => $recipe['cooking_time'],
+      'servingsCount' => $recipe['servings_count'],
+      //'img' => $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'],
+      'destinations' => RecipeController::prepareRecipeDestinations($recipe['destinations']),
+      'categories' => RecipeController::prepareRecipeCategories($recipe['categories'])
+    ];
+
+    $short_recipe['ingredients'] = array_map(function($ingredient) {
+      return [
+        'id' => $ingredient['id'],
+        'name' => $ingredient['name'],
+        'quantity' => $ingredient['info']['quantity']
+      ];
+    }, $recipe['ingredients']);
+
+    if ($recipe['is_short_recipe']) {
+      $short_recipe['img'] = $recipe['img_name'];
+      $short_recipe['parsed_url'] = $recipe['recipe_link'];
+    } else {
+      $short_recipe['img'] = $recipe_storage_url . $recipe['recipe_id'] . '/' . $recipe['img_name'];
+    }
+
+    if ($token) {
+      $short_recipe['favorites'] = count($recipe['favorites']) ? true : false;
+    }
+
+    return array(
+      0 => $short_recipe
+    );
   }
 
   private function prepareFullRecipeData($recipe)

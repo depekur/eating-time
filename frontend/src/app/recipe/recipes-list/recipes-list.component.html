@@ -9,97 +9,105 @@
       {{ !showFilters ? 'Показать фильтры' : 'Скрыть фильтры' }}
     </button>
 
-    <!------------->
-    <!-- filters -->
-    <!------------->
-    <aside *ngIf="filters"
-           class="recipes__filters lock-preloader"
-           [class.filters--mobile]="showFilters"
-           [class.lock-element]="isLoading">
 
-      <form [formGroup]="filtersForm">
-
-        <div class="form-group recipes__search-query" >
-          <input type="text"
-                 formControlName="query"
-                 (input)="proceedFilters()"
-                 class="inputs card recipes__search-query"
-                 placeholder="Поиск по названию">
-        </div>
-
-        <div class="form-group" >
-          <custom-select *ngIf="filters.ingredients"
-                         formControlName="ingredients"
-                         (change)="proceedFilters()"
-                         [title]="'Ингридиенты'"
-                         [isSearch]="true"
-                         [showSelected]="false"
-                         [positioned]="true"
-                         [searchPlaceholder]="'Начните вводить название ингридиента...'"
-                         [initialData]="filters.ingredients">
-          </custom-select>
-        </div>
-
-        <div class="form-group">
-          <custom-select *ngIf="filters.categories"
-                         formControlName="categories"
-                         (change)="proceedFilters()"
-                         [title]="'Категория'"
-                         [showSelected]="false"
-                         [isSearch]="true"
-                         [isCategories]="true"
-                         [positioned]="true"
-                         [initialData]="filters.categories">
-          </custom-select>
-        </div>
-
-        <div class="form-group">
-          <custom-select *ngIf="filters.destinations"
-                         formControlName="destinations"
-                         (change)="proceedFilters()"
-                         [showSelected]="false"
-                         [positioned]="true"
-                         [title]="'Назначение'"
-                         [initialData]="filters.destinations">
-          </custom-select>
-        </div>
-
-        <div class="form-group">
-          <custom-select *ngIf="filters.country"
-                         formControlName="countries"
-                         (change)="proceedFilters()"
-                         [title]="'Кухня'"
-                         [showSelected]="false"
-                         [isSearch]="true"
-                         [multiple]="true"
-                         [positioned]="true"
-                         [initialData]="filters.country">
-          </custom-select>
-        </div>
-
-      </form>
-    </aside>
 
 
 
     <section class="recipes-list__container" *ngIf="recipes">
+      <!------------->
+      <!-- filters -->
+      <!------------->
+      <aside *ngIf="filters"
+             class="recipes__filters lock-preloader"
+             [class.filters--mobile]="showFilters"
+             [class.lock-element]="isLoading">
 
+        <form [formGroup]="filtersForm">
 
+          <div class="form-group filters__random">
+            <input type="checkbox"
+                   hidden
+                   #random
+                   formControlName="random"
+                   value="random">
 
-      <!---------------->
-      <!-- rationator -->
-      <!---------------->
-      <section *ngIf="isLoggedIn | async" class="rationator">
-        <rationator></rationator>
-      </section>
+            <button class="btn--mini"
+                    type="button"
+                    (click)="randomRecipeFilter()">Случайный рецепт</button>
+            <button class="btn--mini"
+                    type="button"
+                    (click)="allRecipesFilter()">Все рецепты</button>
+          </div>
+
+          <div class="form-group recipes__search-query" >
+            <input type="text"
+                   formControlName="query"
+                   (input)="proceedFilters()"
+                   class="inputs card recipes__search-query"
+                   placeholder="Поиск по названию">
+          </div>
+
+          <div class="form-group">
+            <custom-select *ngIf="filters.destinations"
+                           formControlName="destinations"
+                           (change)="proceedFilters()"
+                           [showSelected]="false"
+                           [hidden]="false"
+                           [title]="'Назначение'"
+                           [initialData]="filters.destinations">
+            </custom-select>
+          </div>
+
+          <div class="form-group">
+            <custom-select *ngIf="filters.categories"
+                           formControlName="categories"
+                           (change)="proceedFilters()"
+                           [title]="'Категория'"
+                           [showSelected]="false"
+                           [isSearch]="true"
+                           [isCategories]="true"
+                           [hidden]="false"
+                           [initialData]="filters.categories">
+            </custom-select>
+          </div>
+
+          <div class="form-group" >
+            <custom-select *ngIf="filters.ingredients"
+                           formControlName="ingredients"
+                           (change)="proceedFilters()"
+                           [title]="'Ингридиенты'"
+                           [isSearch]="true"
+                           [showSelected]="false"
+                           [hidden]="false"
+                           [searchPlaceholder]="'Начните вводить название ингридиента...'"
+                           [initialData]="filters.ingredients">
+            </custom-select>
+          </div>
+
+          <div class="form-group">
+            <custom-select *ngIf="filters.country"
+                           formControlName="countries"
+                           (change)="proceedFilters()"
+                           [title]="'Кухня'"
+                           [showSelected]="false"
+                           [isSearch]="true"
+                           [multiple]="true"
+                           [hidden]="false"
+                           [initialData]="filters.country">
+            </custom-select>
+          </div>
+
+        </form>
+      </aside>
 
       <!------------------------->
-      <!-- Chosen filters      -->
+      <!-- recipe list      -->
       <!------------------------->
       <div class="recipe-list">
 
-
-
+        <!------------------------->
+        <!-- Chosen filters      -->
+        <!------------------------->
         <div class="recipes__selected-filters">
           <span class="card--mini"
                 *ngFor="let destination of filtersForm.value.destinations">
@@ -136,7 +144,7 @@
         </h1>
 
         <div *ngIf="recipes.length && paginator.total"
-             class="recipes-list">
+             class="recipe-list__list">
           <recipe-card *ngFor="let recipe of recipes"
                        [isLoggedIn]="isLoggedIn"
                        [recipe]="recipe"
@@ -156,7 +164,18 @@
 
       </div>
 
+
+      <!---------------->
+      <!-- rationator -->
+      <!---------------->
+      <section  *ngIf="isLoggedIn | async" class="rationator">
+        <rationator stick></rationator>
+      </section>
+
+
     </section>
+
+
   </section>
 
 

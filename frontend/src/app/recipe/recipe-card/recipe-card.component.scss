@@ -1,6 +1,108 @@
 @import "../../../assets/style/var";
 
+:host {
+  //flex: 0 0 30%;
+  width: 100%;
+
+  margin: 0 10px 15px;
+  padding: 0 0 5px;
+}
+
 .recipe {
+  padding: 10px;
+  //display: flex;
+
+  .recipe__main-info {
+    display: flex;
+
+    margin-bottom: 10px;
+  }
+
+  figure {
+    max-height: 200px;
+    max-width: 250px;
+    overflow: hidden;
+
+    img {
+      width: 120%;
+    }
+  }
+
+  .recipe__main-info {
+
+  }
+
+  &.recipe--dragged {
+    cursor: hand;
+
+    figure,
+    .recipe__filters span,
+    .recipe__nav {
+      display: none;
+    }
+  }
+}
+
+.recipe__info {
+  padding: 0 10px 10px;
+
+  color: lighten($banana-color-13, 20%);
+
+  .recipe__title {
+    padding-bottom: 5px;
+
+    font-size: 18px;
+    line-height: 22px;
+    color: $banana-color-13;
+  }
+
+  .recipe__info__destinations {
+    display: flex;
+    justify-content: flex-start;
+
+    margin-bottom: 15px;
+  }
+}
+
+.recipe__ingredients {
+  margin-top: 10px;
+}
+
+.recipe__filters {
+  //display: flex;
+  //justify-content: flex-start;
+
+  font-size: 15px;
+  line-height: 20px;
+
+  .recipe__destinations {
+    border-bottom: 1px solid $banana-color-4;
+  }
+
+  span {
+    padding-right: 5px;
+  }
+}
+
+.recipe__nav {
+  padding: 10px 0 0;
+  margin-top: 10px;
+  border-top: 1px solid $banana-color-4;
+
+  ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    li {
+      display: inline-block;
+    }
+  }
+}
+
+
+
+.recipe--card {
 
   &.recipe--dragged {
     cursor: hand;
@@ -13,57 +115,11 @@
   }
 
   figure {
-    max-height: 300px;
+    max-height: 150px;
     overflow: hidden;
 
     img {
       width: 100%;
-    }
-  }
-
-  .recipe__info {
-    padding: 10px 10px;
-
-    color: lighten($banana-color-13, 20%);
-
-    .recipe__title {
-      padding-bottom: 10px;
-
-      font-size: 22px;
-      line-height: 26px;
-      color: $banana-color-13;
-    }
-
-    .recipe__info__destinations {
-      display: flex;
-      justify-content: flex-start;
-
-      margin-bottom: 15px;
-    }
-
-    .recipe__info__filters {
-      display: flex;
-      justify-content: flex-start;
-
-      span {
-        padding-right: 15px;
-      }
-    }
-
-    .recipe__nav {
-      padding: 10px 0 0;
-      margin-top: 10px;
-      border-top: 1px solid $banana-color-4;
-
-      ul {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        li {
-          display: inline-block;
-        }
-      }
     }
   }
 

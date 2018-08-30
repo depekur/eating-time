@@ -19,14 +19,22 @@
     padding: 10px 10px 15px;
 
     .eating__empty {
-      height: 68px;
-      width: 68px;
-      margin: 0 auto;
 
 
-      background-image: url('../../../assets/img/food.png');
-      background-repeat: no-repeat;
-      background-size: contain;
+      .eating__empty__icon {
+        display: block;
+        height: 28px;
+        width: 28px;
+        float: left;
+
+        background-size: contain;
+        background: url('../../../assets/img/food.png') no-repeat;
+      }
+
+      span:first-letter {
+        color: lighten($banana-color-13, 20%);
+        text-transform: capitalize;
+      }
     }
 
     .eating__time {
@@ -34,20 +42,16 @@
 
       font-weight: bold;
       color: $banana-color-16;
-
-      //border-bottom: 1px solid $banana-color-16;
     }
 
     div.eating__card {
     }
 
-    //border: 1px solid $banana-color-1;
-
     &.rationator__eating--active {
       border: 2px dashed $banana-color-16;
 
-      .eating__empty {
-        background-image: url('../../../assets/img/food_active.png');
+      .eating__empty__icon {
+        background: url('../../../assets/img/food_active.png') no-repeat;
       }
     }
 
@@ -65,6 +69,10 @@
 
       border: 1px solid $banana-color-1;
       font-size: 14px;
+    }
+
+    .recipe__body {
+      width: 100%;
     }
   }
 }

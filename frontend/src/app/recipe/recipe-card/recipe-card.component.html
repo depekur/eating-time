@@ -1,70 +1,94 @@
 <div class="card recipe"
-     id="recipe-{{ recipe.id }}"
-     mwlDraggable
-     ghostDragEnabled="true"
-     [class.recipe--dragged]="dragged"
-     (dragging)="dragged = true"
-     (dragEnd)="dragged = false"
-     [dropData]="dropData">
+     id="recipe-{{ recipe.id }}">
+
+  <!--<div class="card recipe"-->
+       <!--id="recipe-{{ recipe.id }}"-->
+       <!--mwlDraggable-->
+       <!--ghostDragEnabled="true"-->
+       <!--[class.recipe&#45;&#45;dragged]="dragged"-->
+       <!--(dragging)="dragged = true"-->
+       <!--(dragEnd)="dragged = false"-->
+       <!--[dropData]="dropData">-->
 
 
-  <!--<div *ngIf="recipe.categories" class="recipe__categories">-->
-  <!--<span class="card" *ngFor="let category of recipe.categories">-->
-  <!--{{ category.category_name }}-->
-  <!--</span>-->
-  <!--</div>-->
+  <div class="recipe__main-info">
 
-  <figure>
-    <img *ngIf="recipe.img"
-         class="recipe__img"
-         src="{{ recipe.img }}"
-         alt="{{ recipe.title }}">
-  </figure>
+    <figure>
+      <img *ngIf="recipe.img"
+           class="recipe__img"
+           src="{{ recipe.img }}"
+           alt="{{ recipe.title }}">
+    </figure>
 
-  <div class="recipe__info">
-    <h2 class="recipe__title">{{ recipe.title }}</h2>
+    <div class="recipe__info">
+      <h2 class="recipe__title">
+        <a class="link--dark" routerLink="/recipe/{{ recipe.id }}">
+          {{ recipe.title }}
+        </a>
+      </h2>
 
-    <!--<div *ngIf="recipe.destinations" class="recipe__info__destinations">-->
-      <!--<span *ngFor="let destination of recipe.destinations"-->
-            <!--class="">-->
-        <!--{{ destination.name }}-->
-      <!--</span>-->
-    <!--</div>-->
+      <div>
+        <span *ngIf="recipe.servingsCount">{{ recipe.servingsCount | wordEndings: ['порция',  'порции', 'порций']}} </span>
+        <span *ngIf="recipe.cookingTime">{{ recipe.cookingTime | wordEndings: ['минута',  'минуты', 'минут']}}</span>
+        <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
+      </div>
 
-    <div class="recipe__info__filters">
-      <span *ngIf="recipe.servingsCount">{{ recipe.servingsCount | wordEndings: ['порция',  'порции', 'порций']}} </span>
-      <span *ngIf="recipe.cookingTime">{{ recipe.cookingTime | wordEndings: ['минута',  'минуты', 'минут']}}</span>
-      <span *ngIf="recipe.calories">Калории: {{ recipe.calories }}</span>
+
+      <div class="recipe__ingredients">
+        <p>Ингридиенты:</p>
+        <div *ngFor="let ingredient of recipe.ingredients" class="ingredient">
+          <span>{{ ingredient.name }}</span>
+          <span *ngIf="ingredient.quantity">- {{ ingredient.quantity }}</span>
+        </div>
+      </div>
 
     </div>
 
-
-
-    <nav class="recipe__nav">
-      <ul>
-        <li>
-          <button type="button"
-                  class="btn--mini"
-                  (click)="addRecipeToRation(recipe.id)">
-            <i class="fas fa-plus-square"></i> В меню
-          </button>
-        </li>
-
-        <li>
-          <favorite-recipe *ngIf="isLoggedIn | async"
-                           [recipeId]="recipe.id"
-                           [favorite]="recipe.favorites">
-          </favorite-recipe>
-        </li>
-
-        <li>
-          <a class="link" routerLink="/recipe/{{ recipe.id }}">Подробнее</a>
-        </li>
-      </ul>
-    </nav>
   </div>
 
+  <div class="recipe__filters">
 
+
+    <div *ngIf="recipe.destinations" class="recipe__destinations">
+      <span>Назначение:</span>
+      <span *ngFor="let destination of recipe.destinations">
+          {{ destination.name }}
+      </span>
+    </div>
+
+    <div *ngIf="recipe.categories" class="recipe__categories">
+      <span>Категория:</span>
+      <span  *ngFor="let category of recipe.categories">
+          {{ category.name }}
+      </span>
+    </div>
+
+  </div>
+
+  <nav class="recipe__nav">
+    <ul>
+
+
+      <li>
+        <favorite-recipe *ngIf="isLoggedIn | async"
+                         [recipeId]="recipe.id"
+                         [favorite]="recipe.favorites">
+        </favorite-recipe>
+      </li>
+
+      <li>
+        <button type="button"
+                class="btn--mini"
+                (click)="addRecipeToRation(recipe.id)">
+          <i class="fas fa-plus-square"></i> Добавить в меню
+        </button>
+      </li>
+
+      <!--<li>-->
+        <!--<a class="link" routerLink="/recipe/{{ recipe.id }}">Подробнее</a>-->
+      <!--</li>-->
+    </ul>
+  </nav>
 
 
 </div>

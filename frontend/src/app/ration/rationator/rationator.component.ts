@@ -21,6 +21,22 @@ export class RationatorComponent implements OnInit, OnDestroy {
   @Input() currentDay: number;
   currentDate: ICurrentDate;
 
+  eatingNames = [
+    'завтрак',
+    'полдник',
+    'обед',
+    'перекус',
+    'ужин',
+  ];
+
+  eatingRecommendation = [
+    'манная каша, яйца, бутерброды с сыром',
+    'яблоко, булочка, банан',
+    'борщ, пюрешка, котлетки',
+    'шаурма, бургер, чипсы',
+    'творог, стейк, курица',
+  ];
+
   settings;
   activeEating;
   @select() readonly settings$: Observable<any>;

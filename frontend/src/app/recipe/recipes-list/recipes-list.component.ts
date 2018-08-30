@@ -74,6 +74,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
   //todo stemming
   initFiltersForm() {
     this.filtersForm = new FormGroup({
+      random: new FormControl('', []),
       query: new FormControl('', []),
       destinations: new FormControl('', []),
       categories: new FormControl('', []),
@@ -83,7 +84,11 @@ export class RecipesListComponent implements OnInit, OnDestroy {
   }
 
   proceedFilters() {
-    if (this.filtersForm.touched || this.filtersForm.controls.query.value) {
+    //console.log(this.filtersForm);
+
+    if (this.filtersForm.touched ||
+        this.filtersForm.controls.query.value ||
+        this.filtersForm.controls.random.value) {
       clearTimeout(this.filtersTimeout);
 
       this.filtersTimeout = setTimeout(() => {
@@ -100,6 +105,18 @@ export class RecipesListComponent implements OnInit, OnDestroy {
 
       this.filtersForm.controls[type].setValue(selected);
     }
+  }
+
+  randomRecipeFilter() {
+    this.filtersForm.controls.random.setValue(true);
+
+    this.proceedFilters();
+  }
+
+  allRecipesFilter() {
+    this.filtersForm.controls.random.setValue(true);
+
+    this.proceedFilters();
   }
 
   loadMore() {

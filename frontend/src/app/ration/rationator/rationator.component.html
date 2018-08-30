@@ -11,7 +11,7 @@
       <button class="btn--mini" type="button" (click)="prevDay()">
         <i class="fas fa-arrow-circle-left"></i>
       </button>
-      <button class="btn--mini" type="button">{{ currentDate.date }}</button>
+      <span>{{ currentDate.date }}</span>
       <button class="btn--mini" type="button" (click)="nextDay()">
         <i class="fas fa-arrow-circle-right"></i>
       </button>
@@ -36,17 +36,25 @@
          (drop)="onDropRecipe($event.dropData, i); isDragged[i] = false">
 
 
-      <div class="eating__time">{{ eating.eatingTime.time }}</div>
+      <div class="eating__time">{{ eating.eatingTime.time }} - {{ eatingNames[i] }}</div>
 
       <div *ngIf="!eating.dishes.length || rationDay.food[i].textBody"
            class="eating__empty">
+        <label>
+          <!--<span>Добавьте или перетещите блюда для {{ eatingNames[i] }}а</span>-->
 
+        <i class="eating__empty__icon"></i>
+
+
+        <input [(ngModel)]="rationDay.food[i].textBody"
+                class="recipe__body inputs card"
+                placeholder="Например {{ eatingRecommendation[i] }}">
+
+        </label>
       </div>
 
+
       <div class="eating__card">
-
-
-
 
         <div *ngFor="let dish of eating.dishes"
              class="rationator__recipe">
@@ -62,9 +70,6 @@
         </div>
 
 
-
-        <textarea [(ngModel)]="rationDay.food[i].textBody"
-                  *ngIf="eating.dishes.length"></textarea>
       </div>
 
 

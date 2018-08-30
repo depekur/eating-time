@@ -1,6 +1,8 @@
 export const CONFIG = {
   apiUrl: 'http://api.kitchen.loc/',
-  defaultEatingCount: 5
+  defaultEatingCount: 5,
+  siteName: '',
+  siteTitle: ''
 };
 
 const apiUrl = 'http://api.kitchen.loc/';
