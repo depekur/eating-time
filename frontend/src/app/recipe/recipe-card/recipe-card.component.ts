@@ -1,8 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IShortRecipe} from "../model/recipe.model";
 import {Observable} from "rxjs/Rx";
-import {APP_EVENTS, IAppState} from "../../store";
-import {NgRedux} from "@angular-redux/store";
+import { RationCrudService } from '../service/ration-crud.service';
 
 export interface IDropData {
   recipeId: string;
@@ -21,7 +20,7 @@ export class RecipeCardComponent implements OnInit {
   dropData: IDropData;
   dragged: boolean = false;
 
-  constructor(private ngRedux: NgRedux<IAppState>) {
+  constructor(private rationService: RationCrudService) {
   }
 
   ngOnInit() {
@@ -32,10 +31,6 @@ export class RecipeCardComponent implements OnInit {
   }
 
   addRecipeToRation() {
-    let recipe = {
-      recipeId: this.recipe.id,
-      recipeTitle: this.recipe.title
-    };
-    this.ngRedux.dispatch({type: APP_EVENTS.ADD_RECIPE_TO_RATION, body: recipe});
+    this.rationService.addRecipe(this.recipe.id, this.recipe.title);
   }
 }

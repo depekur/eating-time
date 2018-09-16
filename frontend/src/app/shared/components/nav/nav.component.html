@@ -1,14 +1,14 @@
 <nav class="top-nav">
   <ul class="">
-    <li *ngIf="isLoggedIn | async" class="top-nav__recipes">
-      <a class="link--dark"
-         routerLink="/calendar"
-         routerLinkActive="link--active">календарь</a>
-    </li>
+    <!--<li *ngIf="isLoggedIn | async" class="top-nav__recipes">-->
+      <!--<a class="link&#45;&#45;dark"-->
+         <!--routerLink="/calendar"-->
+         <!--routerLinkActive="link&#45;&#45;active">календарь</a>-->
+    <!--</li>-->
 
     <li class="top-nav__recipes">
       <a class="link--dark"
-         routerLink="/recipe/all"
+         routerLink="/"
          routerLinkActive="link--active">рецепты</a>
     </li>
     <li *ngIf="isLoggedIn | async" class="top-nav__recipes">

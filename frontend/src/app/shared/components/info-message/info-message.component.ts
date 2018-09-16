@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {INFO_MESSAGE_TYPE, InfoMessage} from "./info-message.model";
-import {NgRedux, select} from "@angular-redux/store";
-import {Observable} from "rxjs/Rx";
-import {Subscription} from "rxjs/Subscription";
-import {APP_EVENTS, IAppState} from "../../../store";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { INFO_MESSAGE_TYPE, InfoMessage } from './info-message.model';
+import { NgRedux, select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
+import { APP_EVENTS, IAppState } from '../../../store';
 
 @Component({
   selector: 'app-info-message',
@@ -47,8 +47,7 @@ export class InfoMessageComponent implements OnInit, OnDestroy {
   }
 
   private closeInfoMessage() {
-    this.ngRedux.dispatch({type: APP_EVENTS.UPDATE_ACTIVE_EATING});
-    //this.ngRedux.dispatch({type: APP_EVENTS.HIDE_INFO_MESSAGE});
+    this.ngRedux.dispatch({type: APP_EVENTS.HIDE_INFO_MESSAGE});
   }
 
 }

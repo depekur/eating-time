@@ -1,6 +1,6 @@
 <div *ngIf="message"
      (click)="onClick()"
-     class="d-flex justify-content-between align-items-center alert"
+     class="alert card"
      [class.alert-danger]="message.type === INFO_MESSAGE_TYPE.ERROR"
      [class.alert-warning]="message.type === INFO_MESSAGE_TYPE.WARNING"
      [class.alert-success]="message.type === INFO_MESSAGE_TYPE.SUCCESS">

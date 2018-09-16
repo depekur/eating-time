@@ -1,4 +1,5 @@
 import { Action, AnyAction } from 'redux';
+import { InfoMessage } from './shared/components/info-message/info-message.model';
 
 export interface IAppState {
   isLoggedIn: boolean;
@@ -7,6 +8,7 @@ export interface IAppState {
   currentRationDishes;
   activeEating: number;
   currentDate;
+  infoMessage?: InfoMessage;
 }
 
 export const INITIAL_STATE: IAppState  = {
@@ -27,7 +29,8 @@ export const APP_EVENTS = {
   UPDATE_CURRENT_RATION: 'update current ration day',
   UPDATE_CURRENT_DATE: 'update current day date',
   ADD_RECIPE_TO_RATION: 'add recipe to ration',
-  ADD_RECIPE_TO_RATION_2: 'add recipe to ration 2',
+  SHOW_INFO_MESSAGE: 'Set and show info message',
+  HIDE_INFO_MESSAGE: 'Close info message'
 };
 
 export function rootReducer(state: IAppState, action: AnyAction) {
@@ -96,6 +99,16 @@ export function rootReducer(state: IAppState, action: AnyAction) {
       } else {
         return state;
       }
+
+    case APP_EVENTS.SHOW_INFO_MESSAGE:
+      return assign(state, {
+        infoMessage: action.body
+      });
+
+    case APP_EVENTS.HIDE_INFO_MESSAGE:
+      return assign(state, {
+        infoMessage: null
+      });
 
     default: return state;
   }

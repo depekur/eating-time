@@ -1,63 +1,79 @@
-<!--<pre>-->
-  <!--{{ recipe | json }}-->
-<!--</pre>-->
+<div class="recipe-preloader lock-preloader"
+     [class.lock-element]="!recipe"></div>
 
-<div class="container">
-  <article *ngIf="recipe" class="recipe">
-    <h1>{{ recipe.title }}</h1>
+<div class="recipe" *ngIf="recipe">
+  <aside class="">
+    <div class="card" stick>
+      <div class="recipe__add-to-ration">
+        <button type="button"
+                class="btn--mini"
+                (click)="addRecipeToRation(recipe.id)">
+          <i class="fas fa-plus-square"></i> Добавить рецепт в меню
+        </button>
+      </div>
 
-    <figure>
-      <img *ngIf="recipe.img"
-           class="recipe__img"
-           src="{{ recipe.img }}"
-           alt="{{ recipe.title }}">
-    </figure>
-
-    <div *ngIf="recipe.categories" class="recipe__categories">
-      <span *ngFor="let category of recipe.categories"
-            class="card">
+      <div *ngIf="recipe.categories" class="recipe__categories">
+        <h5>Категория:</h5>
+        <span *ngFor="let category of recipe.categories" class="card--mini">
         {{ category.name }}
       </span>
-    </div>
+      </div>
 
-    <div *ngIf="recipe.destinations" class="recipe__destinations">
-      <span *ngFor="let destination of recipe.destinations"
-            class="card">
+      <div *ngIf="recipe.destinations" class="recipe__destinations">
+        <h5>Назначение рецепта:</h5>
+        <span *ngFor="let destination of recipe.destinations" class="card--mini">
         {{ destination.name }}
       </span>
+      </div>
+
+      <div *ngIf="recipe.ingredients.length"
+           class="recipe__ingredients">
+        <h5>Ингридиенты:</h5>
+        <ul>
+          <li *ngFor="let ingredient of recipe.ingredients" class="card--mini">
+            <span>{{ ingredient.name }}</span>
+            <span *ngIf="ingredient.quantity"> - {{ ingredient.quantity }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <section *ngIf="recipe.ingredients.length"
-             class="recipe__ingredients">
-      <ul>
-        <li *ngFor="let ingredient of recipe.ingredients">
-          <span>{{ ingredient.name }}</span> -
-          <span>{{ ingredient.quantity }}</span>
-        </li>
-      </ul>
-    </section>
+  </aside>
 
-    <p>{{ recipe.body }}</p>
+  <div class="recipe__content">
+    <article class="card">
+      <h1 class="recipe__title">{{ recipe.title }}</h1>
 
-
-    <section *ngIf="recipe.steps.length"
-             class="recipe__steps">
-      <ul>
-        <li *ngFor="let step of recipe.steps">
-          <h3>Шаг {{ step.id }}</h3>
-          <figure *ngIf="step.img">
-            <img
-              class="recipe__img"
-              src="{{ step.img }}"
-              alt="{{ recipe.title }}">
-          </figure>
-
-          <p>{{ step.body }}</p>
+      <figure class="recipe__main-img">
+        <img *ngIf="recipe.img"
+             class=""
+             src="{{ recipe.img }}"
+             alt="{{ recipe.title }}">
+      </figure>
 
 
-        </li>
-      </ul>
-    </section>
-  </article>
 
+      <p class="recipe__body">{{ recipe.body }}</p>
+
+
+      <section *ngIf="recipe.steps.length"
+               class="recipe__steps">
+        <h2>Пошаговый рецепт</h2>
+
+        <ul>
+          <li *ngFor="let step of recipe.steps" class="recipe__step">
+            <span class="step__number">{{ step.id }}</span>
+            <figure *ngIf="step.img">
+              <img
+                class="recipe__img"
+                src="{{ step.img }}"
+                alt="{{ recipe.title }}">
+            </figure>
+
+            <p>{{ step.body }}</p>
+          </li>
+        </ul>
+      </section>
+    </article>
+  </div>
 </div>

@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'wordEndings'
 })
-export class PortionPipe implements PipeTransform {
+export class WordEndingsPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
     const titles = args;

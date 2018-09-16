@@ -1,10 +1,125 @@
+@import '../../../assets/style/var';
+
 .recipe {
+  display: flex;
+  align-items: flex-start;
 
 
-  figure {
+  aside {
+    flex: 0 0 25%;
+    position: relative;
 
-    img {
-      width: 100%;
+    div.card {
+      padding: 10px;
+    }
+
+    .recipe__add-to-ration {
+      margin-bottom: 15px;
+    }
+
+    .recipe__categories,
+    .recipe__destinations,
+    .recipe__ingredients {
+      margin-bottom: 15px;
+
+      h5 {
+        margin-bottom: 5px;
+        font-size: 18px;
+      }
+
+      span.card--mini {
+        display: inline-block;
+        margin-top: 5px;
+      }
+
+    }
+
+    .recipe__ingredients {
+
+      ul {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+
+        li {
+          //display: block;
+          width: auto;
+        }
+      }
+    }
+  }
+
+  .recipe__content {
+    flex: 0 0 75%;
+    padding: 0 20px;
+
+    article {
+      padding: 20px 10px 40px;
+
+      .recipe__title {
+        margin-bottom: 20px;
+
+        font-size: 35px;
+        line-height: 42px;
+      }
+
+      figure.recipe__main-img {
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .recipe__body {
+
+        margin-top: 20px;
+        margin-bottom: 25px;
+      }
+
+      .recipe__steps {
+
+        ul {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          align-items: flex-start;
+
+          li.recipe__step {
+            position: relative;
+            flex: 0 0 50%;
+            padding: 10px;
+
+            .step__number {
+              display: block;
+              width: 30px;
+              height: 30px;
+
+              position: absolute;
+              top: -5px;
+              left: -5px;
+              z-index: 5;
+
+              text-align: center;
+              font-size: 16px;
+              font-weight: bold;
+              line-height: 30px;
+
+              border-radius: 100%;
+              background: $banana-color-1 !important;
+              color: $banana-color-12 !important;
+            }
+
+            figure {
+              width: 100%;
+              img {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

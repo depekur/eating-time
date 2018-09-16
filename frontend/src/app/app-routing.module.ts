@@ -8,12 +8,16 @@ import {WeekRationComponent} from "./ration/week-ration/week-ration.component";
 
 @NgModule({
   imports: [RouterModule.forRoot([
-    {path: '', component: RecipesListComponent},
+    {path: '',  loadChildren: './recipe/recipe.module#RecipeModule'},
+    //{path: '', component: RecipesListComponent},
     {path: 'auth', loadChildren: './auth/auth.module#AuthModule'},
     {path: 'add-recipe', loadChildren: './recipe/create-recipe/create-recipe.module#CreateRecipeModule'},
 
-    {path: 'recipe/all',  component: RecipesListComponent},
-    {path: 'recipe/:id', component: SingleRecipeComponent},
+    //{path: 'recipe',  loadChildren: './recipe/recipe.module#RecipeModule'},
+
+
+    // {path: 'recipe/all',  component: RecipesListComponent},
+    // {path: 'recipe/:id', component: SingleRecipeComponent},
 
     {path: 'calendar', component: CalendarComponent},
     {path: 'week', component: WeekRationComponent},

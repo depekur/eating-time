@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { JwtService } from './shared/services/jwt.service';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -15,7 +15,7 @@ import { CustomValidations } from './shared/custom-validation';
 import { NgRedux, NgReduxModule, DevToolsExtension } from '@angular-redux/store';
 import { IAppState, INITIAL_STATE, rootReducer } from "./store";
 import { CommentsComponent } from './shared/components/comments/comments.component';
-import {JwtInterceptor} from "./jwt.interceptor";
+import { JwtInterceptor } from './jwt.interceptor';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NavComponent } from './shared/components/nav/nav.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';

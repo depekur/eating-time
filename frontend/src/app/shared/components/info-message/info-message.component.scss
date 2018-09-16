@@ -1,5 +1,8 @@
 .alert {
-  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  //position: fixed;
   left: 0;
   top: 0;
   cursor: pointer;
@@ -15,6 +18,18 @@
 
   div {
     flex:1 1 auto;
+  }
+
+  &.alert-danger {
+
+  }
+
+  &.alert-warning {
+
+  }
+
+  &.alert-success {
+
   }
 }
 

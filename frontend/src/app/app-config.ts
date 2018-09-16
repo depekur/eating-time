@@ -2,40 +2,52 @@ export const CONFIG = {
   apiUrl: 'http://api.kitchen.loc/',
   defaultEatingCount: 5,
   siteName: '',
-  siteTitle: ''
+  siteTitle: 'Eating Time',
+  eatingNames: [
+    'завтрак',
+    'полдник',
+    'обед',
+    'перекус',
+    'ужин',
+  ],
+  eatingRecommendation: [
+    'манная каша, яйца, бутерброды с сыром',
+    'яблоко, булочка, банан',
+    'борщ, пюрешка, котлетки',
+    'шаурма, бургер, чипсы',
+    'творог, стейк, курица',
+  ]
 };
 
-const apiUrl = 'http://api.kitchen.loc/';
-
 export const apiUrls = {
-  login: `${apiUrl}login`,
-  register: `${apiUrl}register`,
+  login: `${CONFIG.apiUrl}login`,
+  register: `${CONFIG.apiUrl}register`,
 
-  userInfo: `${apiUrl}user`,
+  userInfo: `${CONFIG.apiUrl}user`,
 
-  filters: `${apiUrl}filters`,
-  ingredients: `${apiUrl}ingredients/`,
-  addRecipe: `${apiUrl}add-recipe`,
+  filters: `${CONFIG.apiUrl}filters`,
+  ingredients: `${CONFIG.apiUrl}ingredients/`,
+  addRecipe: `${CONFIG.apiUrl}add-recipe`,
 
   file: {
-    upload: `${apiUrl}file/upload`,
-    delete: `${apiUrl}file/delete/`,
+    upload: `${CONFIG.apiUrl}file/upload`,
+    delete: `${CONFIG.apiUrl}file/delete/`,
   },
 
   recipe: {
-    add: `${apiUrl}add-recipe`,
-    all: `${apiUrl}recipes`,
-    single: `${apiUrl}recipe/`,
-    favorite: `${apiUrl}favorite`
+    add: `${CONFIG.apiUrl}add-recipe`,
+    all: `${CONFIG.apiUrl}recipes`,
+    single: `${CONFIG.apiUrl}recipe/`,
+    favorite: `${CONFIG.apiUrl}favorite`
   },
 
   ration: {
-    get: `${apiUrl}ration`,
-    getInterval: `${apiUrl}ration/interval`,
-    update: `${apiUrl}ration`,
+    get: `${CONFIG.apiUrl}ration`,
+    getInterval: `${CONFIG.apiUrl}ration/interval`,
+    update: `${CONFIG.apiUrl}ration`,
 
-    delete: `${apiUrl}ration`,
-    deleteInterval: `${apiUrl}ration`,
+    delete: `${CONFIG.apiUrl}ration`,
+    deleteInterval: `${CONFIG.apiUrl}ration`,
   }
 };
 

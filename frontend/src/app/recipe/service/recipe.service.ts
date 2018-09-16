@@ -34,8 +34,10 @@ export class RecipeService {
     Object.keys(query).forEach((paramName) => {
       if (paramName === 'query' && query[paramName]) {
         options.params = options.params.append(paramName, query[paramName]);
-      } else if (paramName == 'random' && query[paramName]) {
-        options.params = options.params.append(paramName, query[paramName]);
+      } else if (paramName === 'random' && query[paramName]) {
+        if (query[paramName]  === 'random') {
+          options.params = options.params.append(paramName, query[paramName]);
+        }
       } else if (query[paramName]) {
         let params = '';
 

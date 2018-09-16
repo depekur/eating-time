@@ -4,40 +4,55 @@ import {AfterViewInit, Directive, ElementRef, OnDestroy, OnInit, Renderer2} from
   selector: '[stick]'
 })
 export class StickDirective implements OnInit, AfterViewInit {
-  elementHeight:number;
-  elementWidth:number;
-  scroll:number;
-  viewHeight:number;
-  footerPos:number;
-  footerHeight:number;
+  elementHeight: number;
+  elementWidth: number;
+  scroll: number;
+  viewHeight: number;
+  footerPos: number;
+  footerHeight: number;
   oldScroll: number;
   elementOffsetTop: number;
-  fullElementOffset:number;
-  viewedOffset:number;
-  scrollToTop:boolean;
-  elementOffsetTopDynamic:any;
+  fullElementOffset: number;
+  viewedOffset: number;
+  scrollToTop: boolean;
+  elementOffsetTopDynamic: any;
 
   coordinates: any = {
     absoluteToTop: 0,
-    fixedToTop: 0
+    absoluteToBottom: 0,
+    fixedToTop: 0,
+    fixedToBottom: 0
   };
 
-  constructor( private el: ElementRef<HTMLElement>,
-               private renderer: Renderer2) { }
+  constructor(private el: ElementRef<HTMLElement>,
+              private renderer: Renderer2) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngAfterViewInit() {
     this.setState(true);
+    this.stickSidebarNav();
 
     window.addEventListener('scroll', () => {
       this.setState();
       this.stickSidebarNav();
 
-      this.debug();
+      /**
+       *  don`t be afraid to use this function
+       *  when something goes wrong
+       */
+      //this.debug();
     });
   }
 
+  /**
+   *  set all params we need to stick all we need
+   *  reset it on scroll to work properly
+   *
+   * @param {boolean} full
+   */
   setState(full: boolean = false) {
     if (full) {
       this.elementOffsetTop = this.el.nativeElement.getBoundingClientRect().top;
@@ -54,13 +69,7 @@ export class StickDirective implements OnInit, AfterViewInit {
 
     this.footerPos = footer[0].offsetTop;
     this.footerHeight = footer[0].clientHeight;
-    // fullHeight: Math.max(
-    //   document.body.scrollHeight, document.documentElement.scrollHeight,
-    //   document.body.offsetHeight, document.documentElement.offsetHeight,
-    //   document.body.clientHeight, document.documentElement.clientHeight
-    // )
-
-    this.scrollToTop = this.oldScroll > this.scroll;
+    this.scrollToTop = this.oldScroll > this.scroll; // scroll direction
 
     this.oldScroll = this.scroll;
     this.fullElementOffset = this.elementOffsetTop + this.elementHeight;
@@ -69,50 +78,92 @@ export class StickDirective implements OnInit, AfterViewInit {
 
   stickSidebarNav() {
     if (this.fullElementOffset < this.viewedOffset) {
-      if (this.scrollToTop && this.scroll > this.elementOffsetTop) {
 
-        this.coordinates.absoluteToTop = this.coordinates.absoluteToTop ?
-          this.coordinates.absoluteToTop :
-          this.scroll - this.viewHeight + this.elementOffsetTop;
-
-        this.setAbsolute(this.coordinates.absoluteToTop);
-
-        // if (this.coordinates.absoluteToTop && (this.coordinates.absoluteToTop < (this.scroll - this.elementOffsetTop))) { // когда еще не до верху прокручена
-          // this.coordinates.fixedToTop = this.coordinates.fixedToTop ?
-          //                               this.coordinates.fixedToTop :
-          //                               this.scroll;
-          //
-          // this.setFixedToTop(this.coordinates.fixedToTop);
-        // } else {
-        //   this.setAbsoluteToTop();
-        // }
-      } else {
-        this.coordinates.absoluteToTop = 0;
-
-        let fixedTop;
-
-        if (this.viewHeight < this.elementHeight) {
-          fixedTop = this.viewHeight - this.elementHeight - 10;
-        } else {
-          fixedTop = 10;
-        }
-
-        this.setFixed(fixedTop);
+      /**
+       *  unset fixed position
+       *  when element height is smaller that view height
+       */
+      if ((this.scroll < this.elementOffsetTop) && (this.viewHeight - this.footerHeight) > this.elementHeight) {
+        this.unsetFixed();
+        this.unsetCoordinates();
       }
 
+      if (this.scrollToTop && (this.scroll > this.elementOffsetTop) && ((this.viewHeight - this.footerHeight) < this.elementHeight)) {
 
-    } else {
+        if (this.elementOffsetTopDynamic > 10) {
+          /**
+           *  set element fixed
+           *  top part on the top of the view
+           *  when user scroll to top
+           *  and the top part of the element shown on the view
+           */
+          this.coordinates.fixedToTop = 10;
+          this.coordinates.absoluteToTop = 0;
+          this.setFixed(this.coordinates.fixedToTop);
+
+          console.log('fixed');
+
+        } else if (this.coordinates.fixedToTop) {
+          //this.coordinates.fixedToTop = 0;
+
+          this.coordinates.absoluteToTop = this.coordinates.absoluteToTop ?
+            this.coordinates.absoluteToTop :
+            this.scroll - this.viewHeight + this.elementOffsetTop;
+
+          console.log('absolute');
+
+          /**
+           *  set element absolute
+           *  when element already fixed to bottom
+           *  and user scroll to top
+           */
+          //this.setAbsolute(this.coordinates.absoluteToTop);
+        }
+      } else if (!this.scrollToTop && (this.scroll > this.elementOffsetTop)) {
+        this.coordinates.absoluteToTop = 0;
+
+        if (this.viewHeight < this.elementHeight) {
+          this.coordinates.fixedToBottom = this.viewHeight - this.elementHeight - 10;
+        } else {
+          this.coordinates.fixedToBottom = 10;
+        }
+
+        /**
+         *  fix element when his bottom position is showing in the view
+         *  bottom part of element to bottom part of view
+         */
+        this.setFixed(this.coordinates.fixedToBottom);
+      }
+
+      /**
+       *  set position absolute
+       *  when already user scroll near bottom
+       *  so fixed element start scrolling up with page
+       */
+      if ((this.viewHeight - this.footerHeight) < this.elementHeight) {
+        if ((this.footerPos - this.viewHeight) < this.scroll) {
+          this.coordinates.absoluteToBottom = this.footerPos - this.fullElementOffset - 30;
+
+
+          this.setAbsolute(this.coordinates.absoluteToBottom);
+        }
+      }
+
+    } else if (this.scroll < this.elementOffsetTop) {
+      /**
+       *  unset fixed position
+       *  when element height is bigger that view height
+       */
       this.unsetFixed();
+      this.unsetCoordinates();
     }
+  }
 
-    if ((this.footerPos - this.viewHeight) < this.scroll) {
-      let absoluteTop = this.footerPos - this.viewHeight - this.elementHeight + this.elementOffsetTop + 300;
-
-      this.setAbsolute(absoluteTop);
-    } else {
-      // this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
-      // this.renderer.setStyle(this.el.nativeElement, 'top', `${fixedTop}px`);
-    }
+  unsetCoordinates() {
+    this.coordinates.fixedToTop = 0;
+    this.coordinates.absoluteToTop = 0;
+    this.coordinates.fixedToBottom = 0;
+    this.coordinates.absoluteToBottom = 0;
   }
 
   setFixed(coordinates) {
@@ -133,24 +184,26 @@ export class StickDirective implements OnInit, AfterViewInit {
   }
 
   debug() {
-    console.log('-----------------------------');
-    console.log('fullElementOffset', this.fullElementOffset);
-    console.log('elementOffsetTop', this.elementOffsetTop);
+
+    // console.log('fixedToBottom', this.coordinates.fixedToBottom);
+    // console.log('fixedToTop', this.coordinates.fixedToTop);
+    //
+    // console.log('fullElementOffset', this.fullElementOffset);
+    // console.log('elementOffsetTop', this.elementOffsetTop);
     console.log('elementOffsetTopDynamic', this.elementOffsetTopDynamic);
-    console.log('coordinates.absoluteToTop', this.coordinates.absoluteToTop);
-    console.log('this.scroll - this.elementOffsetTop', this.scroll - this.elementOffsetTop);
+    //console.log('coordinates.absoluteToTop', this.coordinates.absoluteToTop);
+    //console.log('this.scroll - this.elementOffsetTop', this.scroll - this.elementOffsetTop);
     console.log('viewedOffset', this.viewedOffset);
-    console.log('scrollToTop', this.scrollToTop);
-    console.log('oldScroll', this.oldScroll);
     console.log('scroll', this.scroll);
     console.log('viewHeight', this.viewHeight);
-    console.log('footerPos', this.footerPos);
-    console.log('elementHeight', this.elementHeight);
+    //console.log('footerPos', this.footerPos);
+    //console.log('elementHeight', this.elementHeight);
 
-    console.log('this.footerPos - this.viewHeight', this.footerPos - this.viewHeight);
-    console.log('this.scroll + this.footerHeight', this.scroll + this.footerHeight);
+    //console.log('this.footerPos - this.viewHeight', this.footerPos - this.viewHeight);
+    //console.log('this.scroll + this.footerHeight', this.scroll + this.footerHeight);
 
+    console.log('-----------------------------');
 
-    console.log('footer', document.querySelectorAll('app-footer'));
+    //console.log('footer', document.querySelectorAll('app-footer'));
   }
 }

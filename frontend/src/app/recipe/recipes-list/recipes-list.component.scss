@@ -1,95 +1,61 @@
 @import "../../../assets/style/var";
 
-.recipes {
+section.recipes-list__container {
+  width: 100%;
+  padding: 0 0 50px;
+
   display: flex;
-  justify-content: flex-start;
   align-items: flex-start;
-  flex-direction: column;
 
-  min-height: 100%;
-  padding: 0;
 
-  .recipes__filters-toggle {
-    display: none;
+  .recipes__not-found {
+    margin-top: 50px;
+
+    font-size: 40px;
+    text-align: center;
   }
 
+  .recipe-list {
+    flex: 0 0 75%;
+
+    padding: 0 20px;
+
+    .recipe-list__list {
+      width: 100%;
+
+      .recipe {
+
+      }
+    }
 
 
-  section.recipes-list__container {
-    width: 100%;
-    padding: 10px 0 50px;
-
-    display: flex;
-    align-items: flex-start;
-
-
-    .recipes__not-found {
-      margin-top: 50px;
-
-      font-size: 40px;
+    .load-more {
       text-align: center;
     }
-
-    .recipe-list {
-      //display: flex;
-      flex: 0 0 50%;
-      //justify-content: center;
-      //align-items: flex-start;
-      //flex-wrap: wrap;
-
-      padding: 0 20px;
-
-      .recipe-list__list {
-        width: 100%;
-
-        .recipe {
-
-        }
-      }
-
-
-
-      .load-more {
-        text-align: center;
-      }
-    }
-
-    .rationator {
-      flex: 0 0 30%;
-      position: relative;
-    }
-
-    aside.recipes__filters {
-      flex: 0 0 18%;
-
-      //border-bottom: 1px solid $banana-color-1;
-
-      form {
-        //display: flex;
-        //justify-content: space-around;
-        //align-items: flex-start;
-
-        .form-group {
-          width: 100%;
-        }
-
-        .form-group.recipes__search-query {
-          input {
-            width: 100%;
-          }
-        }
-      }
-    }
-
-
   }
 
+  aside.recipes__filters {
+    flex: 0 0 25%;
 
+    form {
+      .form-group {
+        width: 100%;
+      }
 
-  .recipes-list__filters {
+      .filters__random {
+        display: flex;
+        justify-content: space-between;
 
-    &.filters--mobile {
-      display: none;
+        button {
+
+        }
+      }
+
+      .form-group.recipes__search-query {
+        input {
+          width: 100%;
+        }
+      }
     }
   }
 }

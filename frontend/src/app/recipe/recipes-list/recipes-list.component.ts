@@ -70,7 +70,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
   }
 
 
-  //todo fulltext search of ingredients, steps, body
+  //todo fulltext search of ingredients, steps??, body??
   //todo stemming
   initFiltersForm() {
     this.filtersForm = new FormGroup({
@@ -84,8 +84,6 @@ export class RecipesListComponent implements OnInit, OnDestroy {
   }
 
   proceedFilters() {
-    //console.log(this.filtersForm);
-
     if (this.filtersForm.touched ||
         this.filtersForm.controls.query.value ||
         this.filtersForm.controls.random.value) {
@@ -108,14 +106,12 @@ export class RecipesListComponent implements OnInit, OnDestroy {
   }
 
   randomRecipeFilter() {
-    this.filtersForm.controls.random.setValue(true);
-
+    this.filtersForm.controls.random.setValue('random');
     this.proceedFilters();
   }
 
   allRecipesFilter() {
-    this.filtersForm.controls.random.setValue(true);
-
+    this.filtersForm.controls.random.setValue('all');
     this.proceedFilters();
   }
 

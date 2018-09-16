@@ -65,10 +65,13 @@
       justify-content: space-between;
       align-items: center;
 
-      padding: 10px;
+      padding: 5px;
 
-      border: 1px solid $banana-color-1;
       font-size: 14px;
+
+      &:hover {
+        background: $banana-color-4;
+      }
     }
 
     .recipe__body {

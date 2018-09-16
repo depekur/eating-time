@@ -6,6 +6,7 @@ import {Observable} from "rxjs/Rx";
 import {NgRedux, select} from "@angular-redux/store";
 import {FormControl, FormGroup, Validators, FormBuilder, FormArray} from "@angular/forms";
 import {APP_EVENTS, IAppState} from "../../store";
+import { CONFIG } from '../../app-config';
 
 export interface ICurrentDate {
   date: string;
@@ -20,23 +21,8 @@ export interface ICurrentDate {
 export class RationatorComponent implements OnInit, OnDestroy {
   @Input() currentDay: number;
   currentDate: ICurrentDate;
-
-  eatingNames = [
-    'завтрак',
-    'полдник',
-    'обед',
-    'перекус',
-    'ужин',
-  ];
-
-  eatingRecommendation = [
-    'манная каша, яйца, бутерброды с сыром',
-    'яблоко, булочка, банан',
-    'борщ, пюрешка, котлетки',
-    'шаурма, бургер, чипсы',
-    'творог, стейк, курица',
-  ];
-
+  eatingNames = CONFIG.eatingNames;
+  eatingRecommendation = CONFIG.eatingRecommendation;
   settings;
   activeEating;
   @select() readonly settings$: Observable<any>;

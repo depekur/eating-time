@@ -38,12 +38,11 @@
 
       <div class="eating__time">{{ eating.eatingTime.time }} - {{ eatingNames[i] }}</div>
 
-      <div *ngIf="!eating.dishes.length || rationDay.food[i].textBody"
-           class="eating__empty">
+      <div class="eating__empty">
         <label>
           <!--<span>Добавьте или перетещите блюда для {{ eatingNames[i] }}а</span>-->
 
-        <i class="eating__empty__icon"></i>
+        <!--<i class="eating__empty__icon"></i>-->
 
 
         <input [(ngModel)]="rationDay.food[i].textBody"
@@ -58,7 +57,7 @@
 
         <div *ngFor="let dish of eating.dishes"
              class="rationator__recipe">
-          <p>{{ dish.recipeTitle }}</p>
+          <a class="link" routerLink="/recipe/{{ dish.recipeId }}">{{ dish.recipeTitle }}</a>
 
           <!--<input type="text" class="inputs" placeholder="Кол-во">-->
 
